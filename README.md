@@ -1,36 +1,29 @@
-# galaxyPayFrappe · Geliştirici rehberi
+# galaxyPayFrappe · Developer docs
 
-[**Güncel V2 rehberi →**](https://karacaismail.github.io/galaxyPayFrappe/v2/) · [V1 doküman seti](https://karacaismail.github.io/galaxyPayFrappe/) · [V2 Markdown](https://karacaismail.github.io/galaxyPayFrappe/downloads/galaksipay-frappe-v2.md)
+[**Güncel geliştirici merkezi**](https://karacaismail.github.io/galaxyPayFrappe/v2/) · [API referansı](https://karacaismail.github.io/galaxyPayFrappe/v2/api/) · [18 test kartı](https://karacaismail.github.io/galaxyPayFrappe/v2/test-data/) · [Core → maturity](https://karacaismail.github.io/galaxyPayFrappe/v2/roadmap/)
 
-Astro ile Türkçe GalaksiPay entegrasyon planı. **Bu repo dokümantasyon sitesidir; ödeme backend’i henüz uygulanmadı.**
+Astro doküman sitesi. **Frappe ödeme backend’i ve Vue/TypeScript ürün arayüzleri henüz geliştirilmedi.** Kaynak e-posta, C# demo ve 18 Eylül 2026 OpenAPI şemasıdır.
 
-- **V2:** Frappe custom app, Vue headless admin, TypeScript/Vite + Tailwind/Flowbite/Alpine.js frontpages. Alıcı, satıcı ve platform için 28 senaryo, 24 iş kartı; MVP öncesi → MVP → post-MVP → enterprise/maturity.
-- **V1:** önceki mimari önerisi ve ayrıntılı API/test/operasyon referansı; 9 faz, 26 sprint, 78 kart, 42 belge. V1 takvimi güncel Frappe MVP takvimi değildir.
-- **Adaptive V2 portal:** 320 px taban, minimum 1rem metin. Ortak kod + seçilen kompakt/masaüstü JS ve CSS modülü. Masaüstü gezinmesi mobilde gizlenmiş DOM olarak gönderilmez.
-
-## Yerel geliştirme
+- 23 güncel DX dokümanı; quickstart, test verisi, 10 operasyon referansı, 12 model, callback fixture, TDD ve açık kararlar.
+- 8 faz / 13 sprint / 39 RED senaryosu: core development → MVP → post-MVP → finans → dayanıklılık → güvenlik/DX → enterprise → maturity.
+- Sağlayıcının 18 **dummy sandbox kartı** kayıpsız dokümante edilir. Kartların fiili kabulü denenmedi. Hesap parolası ve kayıtlı cüzdan telefonu public çıktıda yok.
+- 320 CSS px ortak taban, minimum 1rem; seçilen compact/desktop JS ve CSS modülleri. Güncel içerik kökten açılır; eski plan `/v1/` arşivindedir.
 
 ```sh
 cd docs-site
 npm ci
+npm run test:docs
 npm run dev
 ```
 
-Yerel V2: http://127.0.0.1:4321/v2/
+Yerel: http://127.0.0.1:4321/v2/
 
 ```sh
-# Yerel kök adres ve GitHub Pages alt yolu
 npm run verify
 SITE_BASE=/galaxyPayFrappe npm run verify
 SITE_BASE=/galaxyPayFrappe npm run preview -- --port 4322
 ```
 
-Son komuttan sonra: http://127.0.0.1:4322/galaxyPayFrappe/v2/
+`main` pushu GitHub Actions ile test → build → Pages deployment çalıştırır. Pages yalnız statik dokümandır; callback/Frappe servisi değildir. Orijinal demo ve ekler git dışında kalır; doğrulanmış dummy kart referansı ayrıca yayımlanır.
 
-## Yayın ve kapsam
-
-`main` pushu `.github/workflows/pages.yml` ile kontrol → build → GitHub Pages deployment çalıştırır. Kaynak ve Pages herkese açıktır. GitHub Pages yalnızca Astro’nun statik çıktısını sunar; Frappe, DB ve worker ayrı uygulama ortamında çalışacaktır.
-
-Orijinal `GalaksipayDemo/` ve `GalaksiPay_Test_Kartları.txt` sağlayıcı materyalidir; git tarafından yok sayılır. Credentiallar, gerçek telefonlar ve test kartı bilgileri public çıktıya eklenmez. Sağlayıcı hesabına giriş veya ödeme/iade çağrısı yapılmadı.
-
-[Site geliştirme rehberi](docs-site/README.md) · [Doğrulama kaydı](docs-site/VERIFICATION.md)
+[Site geliştirme notları](docs-site/README.md) · [Doğrulama kaydı](docs-site/VERIFICATION.md) · [Eksik ve gereksiz içerik analizi](https://karacaismail.github.io/galaxyPayFrappe/v2/audit/)

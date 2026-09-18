@@ -47,3 +47,21 @@ Codex tarayıcısında localhost uygulaması üzerinden:
 - CSS ilk denemede Astro tarafından ortak HTML’e alınmıştı. Profil CSS’leri `?url` assetleriyle yalnız mount anında eklenerek düzeltildi; verifier bu sızıntıyı ve ayrı artifactleri kontrol ediyor.
 
 Tarayıcı kaynak kaydı cache hitlerini de kapsar; temiz, izole browser context/HAR veya gerçek dokunmatik cihaz testi bu teslimde yapılmadı. 200% zoom, yavaş ağ, tam WCAG, gerçek provider ödeme UAT ve Vue/Frappe uygulama testleri planın kabul işleri olarak duruyor. Buradaki mobil ölçümler yalnız çalışan Astro V2 doküman sayfasına aittir.
+
+## V2.1 / DX ve test-first düzeltmesi
+
+18 Eylül 2026: kullanıcı geri bildirimi üzerine kaynak e-posta/demo/test kartları/OpenAPI ile yayın karşılaştırıldı. Önceki teslimde sağlayıcı dummy kartlarının tamamen dışarıda bırakılması düzeltildi. Bu bölüm önceki V2 kart/takvim ve arayüz durumunu günceller.
+
+- Test-first: `tests/dx-contract.test.mjs` içindeki 5 kabul testi yeni içerik/veri henüz yokken başarısız çalıştırıldı; dosya/veri/ref düzenlemesinden sonra 5/5 geçti. Bunlar **doküman kabul testleridir**, ödeme backend’inin uygulanmış TDD testleri değildir.
+- Kaynak dosyada 18 test kartı; sıra/PAN/SKT/CVV/OTP yerel kaynakla karşılaştırıldı. Normalize veri hash’i ve kaynak SHA-256 ile test sabitlendi; JSON indirmesi ve Markdown kartları aynı veriyi içeriyor. Fiili banka/3DS kabulü denenmedi.
+- Swagger yeniden HTTP GET 200: 40 path, SHA-256 önceki snapshotla aynı. Tam OpenAPI içindeki yerel `$ref`ler çözülüyor; seçilmiş 10 operation path/method ve örnek request alanları şemaya karşı kontrol edildi.
+- 23 güncel DX sayfası; 10 endpoint, 12 model, quickstart/env, callback fixture, test verileri, core ve TDD. Postman koleksiyonu çağrı şablonudur; çalıştırılmadı.
+- Güncel plan: 8 faz, 13 sprint, 39 Given/When/Then RED test senaryosu. Her sprintte build, owner, fixture, evidence ve bağımlılık var; gerçek domain testleri gelecekteki core/MVP kapsamındadır.
+- Hem `npm run verify` hem `SITE_BASE=/galaxyPayFrappe npm run verify` geçti: 23 Astro/TS dosyasında 0 hata/uyarı/ipucu; 69 HTML sayfa, 2.428 iç link/anchor, 66 arama kaydı.
+- Gerçek tarayıcı / production preview: kök adres `/v2/` merkezine yönleniyor; API indeksi 10 operasyon gösteriyor; “test kart” araması test verisi referansını ilk sonuçta buluyor.
+- Test verisi sayfasında 18 kart, 18 kopyalama eylemi; CARD-01 düğmesi “Kopyalandı” sonucu verdi. 320 CSS px’de sayfa taşması yok.
+- 320 CSS px mobile reference: minimum metin 16px; document width/scrollWidth 320/320; desktop DOM 0. Kaynak kaydı ortak CSS + iki ortak JS + compact JS/CSS içeriyor; desktop JS/CSS yok.
+- 1280 CSS px/fine pointer reference: width/scrollWidth 1280/1280; desktop gezinmesi 1; ortak dosyalar + desktop JS/CSS; compact asset yok.
+- Profil kontrolünde kullanılan dosyalar: `DxLayout.De66Uy0a.css`, `DxLayout.astro_astro_type_script_index_0_lang.DAd_k-P4.js`, `DxLayout.astro_astro_type_script_index_1_lang.BkfEtx15.js`; kompakt `compact.CQp8MTVd.js` / `compact-only.KdhGEnCO.css`; masaüstü `desktop.DTWsv_iD.js` / `desktop-only.B4L4BO6x.css`.
+
+Tarayıcı testi emüle viewport ve aynı sayfanın resource kayıtlarıyla yapılır; temiz izole HAR, gerçek dokunmatik cihaz, tam WCAG veya gerçek Frappe/provider UAT kanıtı değildir. Güncel `/v2/audit/` eksik kaynakları ve kaldırılan/taşınan gereksiz içeriği açıkça listeler. V1 `/v1/` ve `/docs/` altında arşiv uyarısıyla korunur.

@@ -16,7 +16,7 @@ const sprint=roadmap.sprints.find(s=>s.slug===doc.id);
       <div class="eyebrow"><span class="accent-line"></span>{sprint?`FAZ ${sprint.phase} / SPRINT ${sprint.id}`:doc.data.group.toLocaleUpperCase('tr')}</div>
       <h1>{doc.data.title}</h1><p class="doc-description">{doc.data.description}</p>
       <div class="doc-meta"><span><Icon name="clock" size={17}/>18 Eylül 2026</span><span>{sprint?'Planlandı · 2 hafta':'v1.0 · Geliştirme rehberi'}</span></div>
-      {sprint&&<a class="sprint-back" href={withBase(`/#faz-${sprint.phase}`)}><Icon name="route"/>Yol haritasında göster<Icon name="arrow"/></a>}
+      {sprint&&<a class="sprint-back" href={withBase(`/v1/#faz-${sprint.phase}`)}><Icon name="route"/>Yol haritasında göster<Icon name="arrow"/></a>}
       <div class="prose"><Content/></div>
       <div class="doc-end"><span>Bir sonraki adım</span><a href={withBase(sprint&&sprint.number<26?`/docs/sprint-${String(sprint.number+1).padStart(2,'0')}/`:'/docs/sprint-01/')}>{sprint&&sprint.number<26?'Sonraki sprinti incele':'Sprint 01 ile başla'}<Icon name="arrow"/></a></div>
     </article>

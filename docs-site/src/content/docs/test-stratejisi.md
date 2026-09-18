@@ -8,7 +8,8 @@ group: "Kalite & işletim"
 
 Unit: para, normalize, durum geçişleri. Contract: OpenAPI ve redakte fixture uyumu. Integration: gerçek test PostgreSQL, unique kısıtlar, concurrency ve transaction rollback. Mock E2E: UI→backend→provider simülatörü→callback. Sandbox UAT: gerçek sağlayıcı kart/cüzdan akışı. Yük/kaos: önce yerel mock, sonra açıkça izinli ortam.
 
-Demo test kartlarını güvenli yerel materyalden seç; PAN/CVV değerlerini repo, ekran görüntüsü, CI logu veya portala taşıma. Kart reddinde listedeki başka güncel kartı dene ve kart referansını maskeli kaydet. Cüzdan senaryosu için yazışmadaki yetkili test hesabı gerekir. Bu teslimde hiçbir kart/ödeme denemesi yapılmadı.
+**V2 düzeltmesi:** Sağlayıcının dummy test kartları [test verisi referansında](/v2/test-data/) yayımlanır. Önceki “tüm PAN/CVV değerlerini portaldan çıkar” yaklaşımı bu test verisi için gereksizdi. Gerçek kart verisi, hesap parolası ve kayıtlı cüzdan telefonu public fixture değildir. Kartların fiili geçerliliği ve gerçek ödeme UAT henüz denenmedi.
+
 
 ## MVP kabul matrisi
 

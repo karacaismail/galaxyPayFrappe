@@ -1,9 +1,9 @@
-/* Scope remains inactive after a resize; downloaded bytes cannot be undone. */
+/* This asset is requested only after the desktop module is selected. */
 @media(min-width:64rem) and (pointer:fine){
-html[data-profile="desktop"] .document-shell{display:grid;grid-template-columns:minmax(0,1fr) minmax(17rem,20rem);gap:clamp(2rem,4vw,4rem);align-items:start}
-.desktop-toc{position:sticky;inset-block-start:1.5rem;max-block-size:calc(100dvh - 3rem);overflow:auto;padding-inline-start:1.25rem;border-inline-start:1px solid var(--line)}
-.desktop-toc p{font-size:1rem;font-weight:650;letter-spacing:.035em;color:var(--muted)}
-.desktop-toc nav{display:grid;gap:.15rem}.desktop-toc a{display:block;padding:.6rem .65rem;min-block-size:44px;font-size:1rem;line-height:1.4;text-decoration:none;color:var(--muted);border-radius:6px}.desktop-toc a:hover,.desktop-toc a[aria-current]{color:var(--accent);background:#e6efe9}
+html[data-profile="desktop"] .document-shell{display:grid;grid-template-columns:17rem minmax(0,1fr);gap:clamp(2rem,4vw,4rem);align-items:start}
+html[data-profile="desktop"] .docs-navigation{display:none}
+.desktop-toc{grid-row:1;grid-column:1;position:sticky;inset-block-start:1rem;max-block-size:calc(100dvh - 2rem);overflow:auto;border-inline-end:1px solid var(--line);padding-inline-end:1rem}
+html[data-profile="desktop"] #playbook{grid-column:2;grid-row:1}
+.desktop-toc a{display:block;min-block-size:44px;padding:.6rem .5rem;border-radius:6px;font-size:1rem;line-height:1.4;color:var(--muted);text-decoration:none}.desktop-toc a:hover,.desktop-toc a[aria-current]{color:var(--accent);background:#e8f0eb}.desktop-toc a[aria-current]{font-weight:650}.desktop-toc nav{display:grid;gap:.1rem}
 }
-
 @media print{.desktop-toc{display:none}}

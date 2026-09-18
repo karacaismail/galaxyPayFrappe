@@ -29,13 +29,18 @@ for(const sprint of roadmap.sprints){
  if(!roadmap.phases.some(p=>p.id===sprint.phase))failures.push(`${sprint.id}: missing phase`);
 }
 const search=JSON.parse(await readFile('dist/search.json','utf8'));
-if(search.length!==43 || !search.some(doc=>doc.url===base+'/v2/'))failures.push('Search must contain 42 v1 docs plus Frappe v2.');
+const dxDocs=(await walk('src/content/v2')).filter(f=>f.endsWith('.md'));
+if(search.length!==42+dxDocs.length+1 || !search.some(doc=>doc.url===base+'/v2/test-data/'))failures.push('Search must contain V1 and every current DX page.');
 const bundle=await readFile('dist/downloads/galaksipay-playbook.md','utf8');
 if(!bundle.includes('GP-261')||!bundle.includes('Q14'))failures.push('Incomplete Markdown export.');
 const v2 = await readFile('dist/v2/index.html','utf8');
 const v2Bundle = await readFile('dist/downloads/galaksipay-frappe-v2.md','utf8');
-const v2Cards = [...v2Bundle.matchAll(/^- \*\*(F\d-\d)/gm)].map(m=>m[1]);
-if(v2Cards.length!==24 || new Set(v2Cards).size!==24)failures.push('V2 must contain 24 unique cards.');
+const plan=JSON.parse(await readFile('src/data/development-plan.json','utf8'));
+const currentRoadmap=await readFile('dist/v2/roadmap/index.html','utf8');
+for(const phase of plan.phases)for(const sprint of phase.sprints){
+ if(!currentRoadmap.includes(`id="${sprint.id.toLowerCase()}"`))failures.push(`Missing sprint anchor ${sprint.id}`);
+ for(const test of sprint.redTests)if(!currentRoadmap.includes(test.id)||!v2Bundle.includes(test.id))failures.push(`Missing documented RED test ${test.id}`);
+}
 if(/<(?:script|link)[^>]*(?:src|href)="[^"]*(?:desktop|compact)[^"]*"/.test(v2))failures.push('V2 adaptive assets must not be static imports/preloads.');
 if(/<style[^>]*>[\s\S]*?html\[data-profile=/.test(v2.split('</head>')[0]))failures.push('Adaptive CSS leaked into shared HTML.');
 for(const profile of ['desktop','compact']){
@@ -47,6 +52,6 @@ for(const profile of ['desktop','compact']){
   if(!code.includes(path.basename(css[0])))failures.push(`${profile} module must load its own CSS URL`);
  }
 }
-for(const term of ['Frappe','Vue','320','F0-1','F7-3'])if(!v2.includes(term))failures.push(`V2 missing ${term}`);
+for(const term of ['Core development','Test kartları','API referansı'])if(!v2.includes(term))failures.push(`V2 missing ${term}`);
 if(failures.length){console.error(failures.join('\n'));process.exit(1);}
-console.log(`Verified ${htmlFiles.length} pages, ${links} local links/anchors; v1: 9 phases/26 sprints/78 stories; v2: 24 cards; 43 search documents.`);
+console.log(`Verified ${htmlFiles.length} pages, ${links} local links/anchors; v1: 9 phases/26 sprints/78 stories; v2: ${dxDocs.length} docs/${plan.phases.length} phases; ${search.length} search documents.`);

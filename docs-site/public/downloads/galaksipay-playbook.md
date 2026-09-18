@@ -409,7 +409,7 @@ Telefon, ad/soyad ve işlem referansları amaç ve rol bazlı işlenir. Doküman
 
 PaymentUrl token taşıyabilir; `Referrer-Policy: no-referrer`, üçüncü taraf script minimizasyonu ve token redaction kullan. API response’da ham MasterpassResponseRawJson, credential veya auth token dönme. Cookie kullanılıyorsa Secure/HttpOnly ve iş akışına uygun SameSite belirle. Callbackin CSRF istisnası kullanıcı komutlarına yayılmamalı; callback ayrı kimlik doğrulama modeline sahip.
 
-Portal statik ve herkese açık bir geliştirme planıdır; GitHub Pages üzerinde yayınlanır. Robots noindex erişim kontrolü sayılmaz. Özel dokümanlar için host seviyesinde kimlik/erişim politikası gerekir. Demo credentialları, test kartları ve özel kaynak dosyaları yayına dahil değildir.
+Portal statik ve herkese açık bir geliştirme planıdır; GitHub Pages üzerinde yayınlanır. Robots noindex erişim kontrolü sayılmaz. Özel dokümanlar için host seviyesinde kimlik/erişim politikası gerekir. Demo credentialları ve özel kaynak dosyaları yayına dahil değildir. Sağlayıcının 18 dummy test kartı v2 test verisi referansında açıkça sandbox olarak etiketlidir; gerçek kart verisi yayımlanmaz.
 
 ## Erişilebilirlik kalite hedefi
 
@@ -559,7 +559,7 @@ Kaynak: src/content/docs/mevcut-durum.md
 | `Program.cs` | PostgreSQL, başlangıç migration, Development TLS bypass, geniş proxy güveni | Üretim sertleştirmesi gerekli |
 | `Models/StartPaymentRequest.cs` | Amount double; SubMerchantId nullable UUID | Para hesabında decimal/minor unit modeli gerekli |
 | `Data/ApplicationDbContext.cs` | Callback record tablosu | Order/Attempt/Inbox/Outbox domaini bulunmuyor |
-| Test kartı dosyası | Dosya mevcut | Kartların geçerliliği denenmedi; içerik yayınlanmadı |
+| Test kartı dosyası | Dosya mevcut | 18 dummy kart v2 test verisi referansında; fiili geçerliliği denenmedi |
 | Entegrasyon dokümanı §2.1 / §2.3 | E-postada referans var | Asıl belge çalışma klasöründe yok |
 
 ## Öncelikli geliştirme boşlukları
@@ -2962,7 +2962,8 @@ Kaynak: src/content/docs/test-stratejisi.md
 
 Unit: para, normalize, durum geçişleri. Contract: OpenAPI ve redakte fixture uyumu. Integration: gerçek test PostgreSQL, unique kısıtlar, concurrency ve transaction rollback. Mock E2E: UI→backend→provider simülatörü→callback. Sandbox UAT: gerçek sağlayıcı kart/cüzdan akışı. Yük/kaos: önce yerel mock, sonra açıkça izinli ortam.
 
-Demo test kartlarını güvenli yerel materyalden seç; PAN/CVV değerlerini repo, ekran görüntüsü, CI logu veya portala taşıma. Kart reddinde listedeki başka güncel kartı dene ve kart referansını maskeli kaydet. Cüzdan senaryosu için yazışmadaki yetkili test hesabı gerekir. Bu teslimde hiçbir kart/ödeme denemesi yapılmadı.
+**V2 düzeltmesi:** Sağlayıcının dummy test kartları [test verisi referansında](https://karacaismail.github.io/galaxyPayFrappe/v2/test-data/) yayımlanır. Önceki “tüm PAN/CVV değerlerini portaldan çıkar” yaklaşımı bu test verisi için gereksizdi. Gerçek kart verisi, hesap parolası ve kayıtlı cüzdan telefonu public fixture değildir. Kartların fiili geçerliliği ve gerçek ödeme UAT henüz denenmedi.
+
 
 ## MVP kabul matrisi
 

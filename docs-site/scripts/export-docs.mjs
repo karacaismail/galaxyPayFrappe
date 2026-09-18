@@ -10,7 +10,18 @@ await mkdir('public/downloads',{recursive:true});
 const origin = process.env.SITE_BASE ? 'https://karacaismail.github.io'+process.env.SITE_BASE.replace(/\/$/,'') : 'http://localhost:4321';
 await writeFile('public/downloads/galaksipay-playbook.md',content.replace(/\]\((\/[^)]*)\)/g, (_, url) => `](${origin}${url})`));
 console.log(`Exported ${pages.length} documents.`);
-const v2 = await readFile('src/content/v2/playbook.md','utf8');
-const v2Bundle = '# GalaksiPay × Frappe · V2 geliştirme rehberi\n\n18 Eylül 2026 · Güncel mimari planı\n\n' + v2.replace(/^---[\s\S]*?---\s*/, '');
-await writeFile('public/downloads/galaksipay-frappe-v2.md', v2Bundle.replace(/\]\((\/[^)]*)\)/g, (_, url) => `](${origin}${url})`));
-console.log('Exported Frappe v2 playbook.');
+async function collectV2(dir){
+ const pages=[];
+ for(const item of await readdir(dir,{withFileTypes:true})){
+  const file=dir+'/'+item.name;
+  if(item.isDirectory())pages.push(...await collectV2(file));
+  else if(item.name.endsWith('.md')){const raw=await readFile(file,'utf8');pages.push({file,title:JSON.parse(raw.match(/^title: (.*)$/m)[1]),body:raw.replace(/^---[\s\S]*?---\s*/,'')});}
+ }
+ return pages;
+}
+const v2=await collectV2('src/content/v2');
+const priority=['quickstart','test-data','api.md','core-development','roadmap','tdd'];
+v2.sort((a,b)=>{const score=p=>{const i=priority.findIndex(x=>p.file.includes(x));return i<0?99:i;};return score(a)-score(b)||a.file.localeCompare(b.file);});
+const v2Bundle='# GalaksiPay × Frappe · DX rehberi v2.1\n\nCore development → MVP → maturity. Bu paket plan ve referanstır; ürün testleri ayrıca uygulanacaktır.\n\n'+v2.map(p=>'# '+p.title+'\n\nKaynak: '+p.file+'\n\n'+p.body).join('\n\n---\n\n');
+await writeFile('public/downloads/galaksipay-frappe-v2.md',v2Bundle.replace(/\]\((\/[^)]*)\)/g,(_,url)=>`](${origin}${url})`));
+console.log(`Exported ${v2.length} Frappe DX documents.`);

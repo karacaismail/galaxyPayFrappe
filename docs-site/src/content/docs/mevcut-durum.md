@@ -19,7 +19,7 @@ group: "Başlangıç"
 | `Program.cs` | PostgreSQL, başlangıç migration, Development TLS bypass, geniş proxy güveni | Üretim sertleştirmesi gerekli |
 | `Models/StartPaymentRequest.cs` | Amount double; SubMerchantId nullable UUID | Para hesabında decimal/minor unit modeli gerekli |
 | `Data/ApplicationDbContext.cs` | Callback record tablosu | Order/Attempt/Inbox/Outbox domaini bulunmuyor |
-| Test kartı dosyası | Dosya mevcut | Kartların geçerliliği denenmedi; içerik yayınlanmadı |
+| Test kartı dosyası | Dosya mevcut | 18 dummy kart v2 test verisi referansında; fiili geçerliliği denenmedi |
 | Entegrasyon dokümanı §2.1 / §2.3 | E-postada referans var | Asıl belge çalışma klasöründe yok |
 
 ## Öncelikli geliştirme boşlukları

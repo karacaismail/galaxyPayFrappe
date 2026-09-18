@@ -1,0 +1,571 @@
+{
+  "version": "2.1",
+  "status": "planned",
+  "cadence": "Bir sprintte en fazla üç dikey dilim; süre kapasite ve kırmızı test kapsamına göre planlanır.",
+  "phases": [
+    {
+      "id": "core",
+      "name": "Faz 0 · Core development",
+      "gate": "Gerçek test DB’sinde domain/izin invariantları; deterministic mock ve repeatable seed; CI negatif testi yakalıyor.",
+      "sprints": [
+        {
+          "id": "C01",
+          "title": "Domain ve yetki çekirdeği",
+          "build": [
+            "Payment Order / Attempt / Membership DocType ve migration",
+            "Minor-unit para, durum makinesi, sipariş versiyonu, rol/nesne kontrolü",
+            "Tekrarlanabilir test site/seed ve DB test katmanı"
+          ],
+          "redTests": [
+            {
+              "id": "UT_money_exact",
+              "level": "unit",
+              "given": "12550 kuruş ve bozuk/negatif değerler",
+              "when": "Tutar normalize edilir",
+              "then": "125.50 kayıpsız; bozuk/negatif reddedilir"
+            },
+            {
+              "id": "IT_seller_isolation",
+              "level": "integration / MariaDB",
+              "given": "Seller A ve B aynı sitede",
+              "when": "A, B’nin liste/detay/dosyasını ister",
+              "then": "Veri dönmez; doğrudan method da reddeder"
+            },
+            {
+              "id": "UT_state_monotonic",
+              "level": "unit",
+              "given": "SUCCEEDED attempt",
+              "when": "Geç PENDING uygulanır",
+              "then": "Durum ve sipariş etkisi değişmez"
+            }
+          ],
+          "fixture": "Buyer A/B; Seller A/B; paid/pending/unknown orders",
+          "evidence": "Test fail/pass logu + migration/rollback + izin matrisi",
+          "owner": "BE + QA",
+          "dependsOn": [],
+          "status": "planned"
+        },
+        {
+          "id": "C02",
+          "title": "Provider portu ve test düzeneği",
+          "build": [
+            "Python GalaksiPay adapter arayüzü + deterministic mock",
+            "Auth/body/error parser; secret/env doğrulama ve snapshot pin",
+            "FE shared DTO/client, ayrı Vite/Vue entry ve 320 profile loader"
+          ],
+          "redTests": [
+            {
+              "id": "CT_auth_shape",
+              "level": "contract",
+              "given": "Onaylı olmayan/bozuk token gövdesi",
+              "when": "Auth parser çalışır",
+              "then": "Token var sanılmaz; contract error"
+            },
+            {
+              "id": "CT_add_shape",
+              "level": "contract",
+              "given": "200 fakat Id/PaymentUrl eksik",
+              "when": "Add sonucu okunur",
+              "then": "Başarı kabul edilmez"
+            },
+            {
+              "id": "UI_desktop_asset_leak",
+              "level": "browser / build",
+              "given": "320 CSS px yeni context",
+              "when": "Public route açılır ve menü kullanılır",
+              "then": "Desktop JS/CSS ve Vue admin artifacti 0"
+            }
+          ],
+          "fixture": "Schema snapshot + synthetic auth/add/status fixtures; gerçek UAT fixture ayrı",
+          "evidence": "Contract raporu + build asset manifesti/HAR; C01/C02 sürüm matrisi",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "C01"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "mvp",
+      "name": "Faz 1 · MVP",
+      "gate": "Alıcı tahsilat → satıcı görünürlüğü → ops recovery çalışır. Kritik negatif testler ve ayrı sandbox UAT/pilot kabulü tamam.",
+      "sprints": [
+        {
+          "id": "M01",
+          "title": "İdempotent ödeme başlatma",
+          "build": [
+            "Sipariş sahibi/CSRF/server tutarı/aktif merchant doğrulaması",
+            "Durable intent + DB unique key + commit sonrası worker",
+            "Hosted PaymentUrl yönlendirmesi ve aynı attempti sürdürme"
+          ],
+          "redTests": [
+            {
+              "id": "IT_double_start",
+              "level": "concurrency / MariaDB",
+              "given": "Aynı order/version, 20 eşzamanlı istek",
+              "when": "Start çağrılır",
+              "then": "1 intent; en fazla 1 provider dispatch"
+            },
+            {
+              "id": "IT_unknown_add",
+              "level": "fault injection",
+              "given": "Provider Add işlendi, cevap veya worker kayboldu",
+              "when": "Job yeniden çalışır",
+              "then": "UNKNOWN; kör ikinci Add yok"
+            },
+            {
+              "id": "IT_start_authorization",
+              "level": "HTTP integration",
+              "given": "Başka buyer IDsi veya geçersiz CSRF",
+              "when": "Start çağrılır",
+              "then": "Provider çağrısı 0"
+            }
+          ],
+          "fixture": "Mock success/timeout; CARD-01 yalnız sandboxta; aktif/pasif merchant",
+          "evidence": "DB/spy assertion + Add crash matrisi + 320 checkout E2E",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "C02"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "M02",
+          "title": "Callback, doğrulama ve kurtarma",
+          "build": [
+            "Durable inbox + schema/kaynak doğrulama + hızlı ACK sınırı",
+            "GetById ile kimlik/tutar/merchant kontrolü + unique effect/outbox",
+            "Scheduler: enqueue kaybı, kayıp callback, UNKNOWN/review"
+          ],
+          "redTests": [
+            {
+              "id": "IT_callback_duplicate",
+              "level": "concurrency / MariaDB",
+              "given": "Aynı event 100 kez",
+              "when": "Aynı anda teslim edilir",
+              "then": "Tek iş etkisi; inbox kanıtı korunur"
+            },
+            {
+              "id": "IT_callback_mismatch",
+              "level": "integration",
+              "given": "Amount/merchant/order çelişkili",
+              "when": "Callback + provider sorgu işlenir",
+              "then": "REVIEW_REQUIRED; fulfillment 0"
+            },
+            {
+              "id": "IT_queue_gap",
+              "level": "fault injection",
+              "given": "DB commit oldu, enqueue öncesi süreç öldü",
+              "when": "Scheduler çalışır",
+              "then": "İş bulunur; Add tekrar edilmez"
+            }
+          ],
+          "fixture": "callback synthetic JSON + bozuk payload + pending/success ters sıra",
+          "evidence": "Commit/rollback + crash recovery logu; Q01/Q02/Q06 kanıtları",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "M01"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "M03",
+          "title": "Üç rolün minimum ekranı",
+          "build": [
+            "Buyer: özet/redirect/pending/sonuç; yenileme desteği",
+            "Seller: aktivasyon/liste/detay/destek",
+            "Vue ops: mapping/işlem/review/refresh/kill switch"
+          ],
+          "redTests": [
+            {
+              "id": "UI_buyer_resume",
+              "level": "E2E mock",
+              "given": "3DS sonrası sekme yenilenir",
+              "when": "Sonuç tekrar açılır",
+              "then": "Aynı attempt; duplicate ödeme yok"
+            },
+            {
+              "id": "UI_role_scope",
+              "level": "E2E + permission",
+              "given": "Aynı işlem IDsi üç rolle",
+              "when": "Ekran ve API açılır",
+              "then": "Sadece izinli alan/eylem görünür ve çalışır"
+            },
+            {
+              "id": "UI_ops_refresh",
+              "level": "E2E mock",
+              "given": "UNKNOWN kayıt",
+              "when": "Ops tekrar sorgula seçer",
+              "then": "GetById; Add çağrısı 0"
+            }
+          ],
+          "fixture": "3 rol seed; unknown/pending/success; uzun Türkçe etiket",
+          "evidence": "Rol E2E + 320/390/768/1280 screenshot + keyboard/focus",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "M02"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "M04",
+          "title": "Sandbox kabulü ve dar pilot",
+          "build": [
+            "Doğrudan kart ve gerekiyorsa kayıtlı kart UAT",
+            "TLS/domain/secret/merchant aktivasyon; alarm ve kill switch",
+            "Manuel iade/itiraz yolu; backup/restore/rollback ve destek devri"
+          ],
+          "redTests": [
+            {
+              "id": "UAT_hosted_payment",
+              "level": "sandbox / manuel kontrollü",
+              "given": "Güncel listedeki test kartı, yetkili hesap",
+              "when": "Hosted ödeme tamamlanır",
+              "then": "Add ID/callback/GetById roundtrip aynı işlemi gösterir"
+            },
+            {
+              "id": "OPS_restore",
+              "level": "restore rehearsal",
+              "given": "Açık attempt içeren yedek",
+              "when": "Staginge restore edilir",
+              "then": "Kayıp tahsilat yok; sorgu ile toparlanır"
+            },
+            {
+              "id": "OPS_kill_switch",
+              "level": "integration + ops",
+              "given": "Yeni start kapalı",
+              "when": "Start ve callback aynı anda gelir",
+              "then": "Start durur; callback/recovery sürer"
+            }
+          ],
+          "fixture": "CARD-01…18; iki dummy merchant; gerçek satıcı pilot için ayrıca aktif",
+          "evidence": "UAT run ID + kullanılan maskeli kart ref + provider teyitleri + iş sahibi kabulü",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "M03"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "post-mvp",
+      "name": "Faz 2 · Post-MVP",
+      "gate": "Onboarding/cüzdan ve teyitli iade/iptal uçları testli; platform etkileri auditli.",
+      "sprints": [
+        {
+          "id": "P01",
+          "title": "Satıcı self-service ve cüzdan",
+          "build": [
+            "§2.3 teyitli onboarding, private belge ve durum",
+            "Satıcı davet/rol iptali ve hesap kurtarma deneyimi",
+            "Kayıtlı kart ile doğrudan kart ayrı akış ve feature flag"
+          ],
+          "redTests": [
+            {
+              "id": "IT_membership_revocation",
+              "level": "integration",
+              "given": "Üye erişimi iptal edildi",
+              "when": "Liste/detay/dosya yeniden istenir",
+              "then": "Üçü de reddedilir"
+            },
+            {
+              "id": "UAT_wallet",
+              "level": "sandbox",
+              "given": "Yetkili kayıtlı kart test telefonu",
+              "when": "Cüzdanla ödeme yapılır",
+              "then": "Kart kaydı bizde tutulmadan doğrulanmış sonuç"
+            },
+            {
+              "id": "IT_private_file",
+              "level": "HTTP integration",
+              "given": "Seller B belgesi",
+              "when": "Seller A indirme URLsi kullanır",
+              "then": "Dosya baytı dönmez"
+            }
+          ],
+          "fixture": "Davet/revoke seed; §2.3 form fixture; TEST_WALLET_PHONE erişimi",
+          "evidence": "UAT + dosya izin testi; onboarding red/onay senaryosu",
+          "owner": "BE + FE + QA",
+          "dependsOn": [
+            "M04"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "P02",
+          "title": "İade ve iptal operasyonu",
+          "build": [
+            "Refund Request ve requester/approver ayrımı",
+            "Teyitli Refund/Void adapterı, ayrı idempotency",
+            "İade belirsizliği inceleme ve müşteri durum ekranı"
+          ],
+          "redTests": [
+            {
+              "id": "IT_refund_duplicate",
+              "level": "concurrency",
+              "given": "Aynı onaylı iade",
+              "when": "20 tekrar/eşzamanlı komut",
+              "then": "Tek mali etki; toplam iade sınırı"
+            },
+            {
+              "id": "IT_refund_unknown",
+              "level": "fault injection",
+              "given": "İade kabul edildi, yanıt kayıp",
+              "when": "Worker retry",
+              "then": "İkinci iade yok; sorgu/manual case"
+            },
+            {
+              "id": "IT_void_window",
+              "level": "contract + domain",
+              "given": "İzinli pencere dışı işlem",
+              "when": "Void istenir",
+              "then": "Açık hata; sipariş iptalini banka iptali sanmaz"
+            }
+          ],
+          "fixture": "Q07 kanıtlı success/refused/timeout fixture; kısmi iade yalnız teyitle",
+          "evidence": "Finans onaylı senaryo + fault test + audit trail",
+          "owner": "BE + Finans + QA",
+          "dependsOn": [
+            "M04"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "finance",
+      "name": "Faz 3 · Finansal doğruluk",
+      "gate": "Sipariş/provider/settlement ayrımı ve tüm farkların sahibi belli; net/brüt raporu kanıtla yeniden üretilebilir.",
+      "sprints": [
+        {
+          "id": "F01",
+          "title": "Mutabakat ve raporlama",
+          "build": [
+            "Provider tarih sorgusu + teyitli settlement importu",
+            "Fark, komisyon/net ve geç kayıt kuyruğu",
+            "Maskeli CSV, chargeback kanıt dosyası ve dönem kapanışı"
+          ],
+          "redTests": [
+            {
+              "id": "IT_reconcile_late",
+              "level": "integration",
+              "given": "Geç settlement + UTC sınırı",
+              "when": "Aynı dönem iki kez işlenir",
+              "then": "Eksik/fazla fark doğru, duplicate 0"
+            },
+            {
+              "id": "IT_csv_formula",
+              "level": "security",
+              "given": "Formül ile başlayan satıcı alanı",
+              "when": "CSV indirilir",
+              "then": "Formül çalıştıran değer üretilmez"
+            },
+            {
+              "id": "IT_finance_scope",
+              "level": "permission",
+              "given": "Finans A kapsamı",
+              "when": "B raporu istenir",
+              "then": "Yetkisiz satır yok"
+            }
+          ],
+          "fixture": "Q09 teyitli dosya/sorgu + brüt/net/farklı komisyon seed",
+          "evidence": "Kaynak toplamları ile rapor eşitliği; finans sign-off",
+          "owner": "BE + Finans + QA",
+          "dependsOn": [
+            "P02"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "reliability",
+      "name": "Faz 4 · Dayanıklılık",
+      "gate": "Hedef yük ve arıza altında kabul edilmiş SLO/RPO/RTO ölçülür; on-call sorumlusu ve replay prosedürü belli.",
+      "sprints": [
+        {
+          "id": "R01",
+          "title": "Yük, kuyruk ve kurtarma",
+          "build": [
+            "Rate limit/backpressure, DLQ ve güvenli replay",
+            "İşlem korelasyonu, metriği/alarmı ve incident runbook",
+            "Yedek/anahtar geri yükleme ve rollout/rollback otomasyonu"
+          ],
+          "redTests": [
+            {
+              "id": "LOAD_queue_limit",
+              "level": "load / mock",
+              "given": "Kararlaştırılmış 2x tepe yük",
+              "when": "Worker yavaşlatılır",
+              "then": "Bellek/kuyruk sınırlı; kayıp olay yok"
+            },
+            {
+              "id": "OPS_restore_key",
+              "level": "ops",
+              "given": "DB ve encryption key yedeği",
+              "when": "Kayıp ortam kurtarılır",
+              "then": "Secret/işler açılır; RPO/RTO raporlu"
+            },
+            {
+              "id": "IT_replay_effect",
+              "level": "integration",
+              "given": "DLQda tamamlanmış event",
+              "when": "Replay yapılır",
+              "then": "Para etkisi yinelenmez"
+            }
+          ],
+          "fixture": "Mock provider, kontrollü Redis/DB/worker faultları",
+          "evidence": "Yük grafiği + restore süresi + alarm/tatbikat kaydı",
+          "owner": "Platform + BE + QA",
+          "dependsOn": [
+            "M04"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "quality",
+      "name": "Faz 5 · Güvenlik ve DX olgunluğu",
+      "gate": "Bağımsız güvenlik incelemesi, retention/rotasyon ve sözleşme drift kapısı çalışır; kritik açık canlıyı engeller.",
+      "sprints": [
+        {
+          "id": "DX01",
+          "title": "Güvenlik ve geliştirici akışı",
+          "build": [
+            "Bağımsız izin/ödeme incelemesi; retention ve secret rotation",
+            "OpenAPI diff + fixture/schema uyum kapısı",
+            "Tek komut mock onboarding ve sürüm yükseltme provası"
+          ],
+          "redTests": [
+            {
+              "id": "SEC_rotate_secret",
+              "level": "integration",
+              "given": "Yeni/iptal edilmiş credential",
+              "when": "Çağrı ve eski token denenir",
+              "then": "Yeni çalışır; eski yetki kalkar"
+            },
+            {
+              "id": "CT_breaking_change",
+              "level": "CI contract",
+              "given": "Required alan/enum kırıcı değişmiş",
+              "when": "Snapshot PR açılır",
+              "then": "CI kırıcı farkı yakalar"
+            },
+            {
+              "id": "DX_clean_checkout",
+              "level": "developer smoke",
+              "given": "Temiz ortam",
+              "when": "Kurulum + seed + mock akış",
+              "then": "Belgelendiği biçimde tekrar üretilebilir"
+            }
+          ],
+          "fixture": "Redakte snapshot pair, retention expiry seed, kurulum matrisi",
+          "evidence": "Pentest kapanışı + CI failure sample + onboarding süre kaydı",
+          "owner": "BE + Güvenlik + DX",
+          "dependsOn": [
+            "M04"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "enterprise",
+      "name": "Faz 6 · Enterprise readiness",
+      "gate": "Sözleşme/ölçek ihtiyacı varsa SSO/MFA, görev ayrılığı ve izolasyon ayrı kanıtla kabul edilir.",
+      "sprints": [
+        {
+          "id": "E01",
+          "title": "Kurumsal erişim ve izolasyon",
+          "build": [
+            "SSO/MFA ve erişim gözden geçirme; SCIM yalnız ihtiyaçla",
+            "Gerekirse site-per-tenant ve geçiş stratejisi",
+            "Audit exportu, görev ayrılığı ve destek sorumlulukları"
+          ],
+          "redTests": [
+            {
+              "id": "IT_sso_revocation",
+              "level": "integration",
+              "given": "IdP kullanıcısı devre dışı",
+              "when": "Eski session/API kullanılır",
+              "then": "Kabul edilen süre içinde erişim biter"
+            },
+            {
+              "id": "IT_tenant_escape",
+              "level": "security",
+              "given": "Tenant A yönetici IDsi",
+              "when": "B API/file/export istenir",
+              "then": "Veri/yan etki yok"
+            },
+            {
+              "id": "IT_approval_separation",
+              "level": "domain",
+              "given": "Talep sahibi onay vermeye çalışır",
+              "when": "Finans komutu çalışır",
+              "then": "Aynı kişi kendi işlemini onaylayamaz"
+            }
+          ],
+          "fixture": "Test IdP + iki tenant + rol matrisi",
+          "evidence": "Müşteri kapsamına göre kabul raporu; SSO/izolasyon testleri",
+          "owner": "Platform + Güvenlik + QA",
+          "dependsOn": [
+            "DX01",
+            "R01"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "maturity",
+      "name": "Faz 7 · Maturity / sürekli gelişim",
+      "gate": "Olgunluk iddiası gözlem ve tekrar eden kontrollerle desteklenir; eksik kanıt varsa tarih yerine açık eksik raporlanır.",
+      "sprints": [
+        {
+          "id": "MT01",
+          "title": "Kanıta dayalı olgunluk döngüsü",
+          "build": [
+            "SLO, maliyet, incident ve finans farkları için dönem incelemesi",
+            "Restore/revoke/finans kapanışı tatbikatlarını tekrar et",
+            "İş değerine göre çoklu provider/taksit/abonelik keşfi"
+          ],
+          "redTests": [
+            {
+              "id": "OPS_maturity_evidence",
+              "level": "audit sample",
+              "given": "Projenin kararlaştırdığı en az 90 günlük kayıt hedefi",
+              "when": "Örnek olay ve işlem izlenir",
+              "then": "Kaynak → durum → finans → sorumlu zinciri kopmaz"
+            },
+            {
+              "id": "OPS_repeat_restore",
+              "level": "ops",
+              "given": "Yeni sürüm ve güncel yedek",
+              "when": "Bağımsız kişi restore eder",
+              "then": "RPO/RTO tekrar sağlanır"
+            },
+            {
+              "id": "EXP_provider_flag",
+              "level": "contract + E2E",
+              "given": "İkinci provider denemesi kapatıldı",
+              "when": "Yeni ödeme ve açık attempt işlenir",
+              "then": "Yeni trafik durur; açık işler doğru adapterda sürer"
+            }
+          ],
+          "fixture": "Gerçek dönemden maskeli kanıt; sentetik tatbikat vakaları",
+          "evidence": "Dönem değerlendirmesi + bağımsız reviewer; dış sertifika iddiası değil",
+          "owner": "Hizmet sahibi + Finans + QA",
+          "dependsOn": [
+            "F01",
+            "R01",
+            "DX01"
+          ],
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

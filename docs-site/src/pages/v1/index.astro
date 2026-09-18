@@ -1,0 +1,38 @@
+---
+import { withBase } from '../../lib/urls';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import roadmap from '../../data/roadmap.json';
+---
+<Layout title="Geliştirme yol haritası" active="roadmap">
+  <div class="plan-note"><span class="note-icon">↗</span><p><strong>Güncel geliştirme rotası: Frappe v2.</strong> Frappe backend, Vue admin, TypeScript frontpages ve 320 px adaptive planı ayrı sayfada. Bu v1 seti önceki mimari ve ayrıntılı kontrol referansıdır. <a href={withBase('/v2/')}>V2 rehberine geç →</a></p></div>
+  <div class="breadcrumb"><span>Geliştirici merkezi</span><Icon name="chevron" size={16}/><span>Yol haritası</span></div>
+  <section class="hero">
+    <div class="hero-copy"><div class="eyebrow"><span class="accent-line"></span>PLANLA. GELİŞTİR. DOĞRULA.</div><h1>İlk ödemeden<br/><span>kurumsal olgunluğa.</span></h1><p>GalaksiPay entegrasyonu için geliştirme yol haritası.<br class="desktop-break"/>Net kapsam, küçük sprintler, kanıta dayalı ilerleme.</p><div class="hero-actions"><a class="button primary" href={withBase('/docs/sprint-01/')}>Sprint 01 ile başla<Icon name="arrow"/></a><a class="button secondary" href={withBase('/docs/baslangic/')}><Icon name="book"/>Rehberi oku</a></div></div>
+    <div class="hero-visual" aria-label="Planın aşamaları: MVP, Platform, Olgunluk"><div class="visual-label"><span class="status-dot"></span>GELİŞTİRME ROTASI</div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="route-node node-one"><span>01</span><strong>MVP</strong></div><div class="route-node node-two"><span>06</span><strong>Platform</strong></div><div class="route-node node-three"><span>08</span><strong>Olgunluk</strong></div><div class="visual-bottom"><span>Bir sprint.<br/>Bir doğrulanmış adım.</span><Icon name="route" size={28}/></div></div>
+  </section>
+  <div class="stats-strip"><div><strong>09<span>faz</span></strong><p>MVP → sürekli gelişim</p></div><div><strong>26<span>sprint</span></strong><p>2 haftalık çalışma ritmi</p></div><div><strong>78<span>iş kartı</span></strong><p>Somut kabul kriterleri</p></div><div><strong>42<span>doküman</span></strong><p>Tek geliştirici rehberi</p></div></div>
+  <div class="plan-note"><span class="note-icon">i</span><p><strong>Canlı bir geliştirme planı.</strong> Tüm sprintler planlandı; ürün geliştirmesi henüz başlamadı. Süreler ekip kapasitesine bağlı tahminlerdir. <a href={withBase('/docs/kapsam/')}>Varsayımları incele <span>↗</span></a></p></div>
+  <section class="roadmap-section" aria-labelledby="roadmap-title">
+    <div class="section-heading"><div><div class="eyebrow muted">ADIM ADIM GELİŞTİRME</div><h2 id="roadmap-title">Yol haritası</h2></div><a class="text-link" href={withBase('/docs/kabul-kapilari/')}>Faz kabul kapıları<Icon name="arrow"/></a></div>
+    <div class="filter-bar" role="group" aria-label="Fazları filtrele">{['Tüm fazlar','Temel','Ölçek','Kurumsal','Sürekli'].map((label,i)=><button class:list={['filter-button',{selected:i===0}]} data-filter={i===0?'all':label} aria-pressed={i===0?'true':'false'}>{label}{i===0&&<span>9</span>}</button>)}</div>
+    <p class="sr-only" id="filter-status" role="status">9 faz gösteriliyor</p>
+    <div class="phase-list">{roadmap.phases.map(phase=><details class:list={['phase-card',{'phase-mvp':phase.id===1}]} id={`faz-${phase.id}`} data-track={phase.track} open={phase.id===1}>
+      <summary><div class="phase-number">{String(phase.id).padStart(2,'0')}</div><div class="phase-summary"><div class="phase-top"><span class="phase-label">FAZ {phase.id}</span><span class="phase-status">{phase.id===1?'BAŞLANGIÇ NOKTASI':'PLANLANDI'}</span></div><h3>{phase.name}<span class="phase-subtitle">{phase.title}</span></h3><p>{phase.description}</p><div class="phase-tags">{phase.tags.map(tag=><span>{tag}</span>)}</div></div><div class="phase-timing"><span class="mono">{phase.range}</span><span><Icon name="clock" size={17}/>{phase.duration}</span><span class="details-hint">Sprintleri gör<Icon name="chevron" size={18}/></span></div></summary>
+      <div class="phase-detail"><div class="sprint-list">{roadmap.sprints.filter(s=>s.phase===phase.id).map(s=><a class="sprint-row" href={withBase(`/docs/${s.slug}/`)}><span class="sprint-id">{s.id}</span><div><strong>{s.title}</strong><p>{s.stories.map(t=>t.id).join(' · ')}<span> / 3 iş kartı</span></p></div><Icon name="arrow"/></a>)}</div><div class="phase-gate"><Icon name="shield"/><p><strong>Faz çıkış kriteri</strong>{phase.gate}</p><a href={withBase('/docs/kabul-kapilari/')} aria-label={`Faz ${phase.id} kabul kapısını incele`}><Icon name="arrow"/></a></div></div>
+    </details>)}</div>
+  </section>
+  <section class="resource-section"><div class="section-heading"><div><div class="eyebrow muted">GELİŞTİRİRKEN YANINDA</div><h2>Doğru bağlam, daha iyi kod.</h2></div></div><div class="resource-grid"><a href={withBase('/docs/ai-playbook/')}><span class="resource-icon"><Icon name="code"/></span><h3>Vibecoding playbook</h3><p>Context pack, görev istemleri ve review döngüsü.</p><span class="text-link">Çalışma modelini keşfet<Icon name="arrow"/></span></a><a href={withBase('/docs/api-referansi/')}><span class="resource-icon"><Icon name="book"/></span><h3>API referansı</h3><p>Swagger ile doğrulanan yollar, alanlar ve açık noktalar.</p><span class="text-link">Sözleşmeyi incele<Icon name="arrow"/></span></a><a href={withBase('/docs/acik-sorular/')}><span class="resource-icon"><Icon name="shield"/></span><h3>Riskler & açık sorular</h3><p>14 karar konusu, sorumlular ve sprint bağımlılıkları.</p><span class="text-link">Bağımlılıkları gör<Icon name="arrow"/></span></a></div></section>
+  <div class="bottom-cta"><div><div class="eyebrow">KÜÇÜK BAŞLA. SAĞLAM İLERLE.</div><h2>İlk sprintin hazır.</h2><p>Sözleşmeyi doğrula, sınırları çiz, geliştirme temelini kur.</p></div><a class="button primary" href={withBase('/docs/sprint-01/')}>Sprint 01’i aç<Icon name="arrow"/></a></div>
+  <script>
+    const filters=document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    filters.forEach(button=>button.addEventListener('click',()=>{
+      filters.forEach(b=>{b.classList.toggle('selected',b===button);b.setAttribute('aria-pressed',String(b===button));});
+      let count=0;
+      document.querySelectorAll<HTMLDetailsElement>('.phase-card').forEach(card=>{card.hidden=button.dataset.filter!=='all'&&card.dataset.track!==button.dataset.filter;if(!card.hidden)count++;});
+      document.querySelector('#filter-status')!.textContent=`${count} faz gösteriliyor`;
+    }));
+    function revealHash(){const card=document.querySelector<HTMLDetailsElement>(location.hash&&/^#faz-\d+$/.test(location.hash)?location.hash:'#faz-1');if(location.hash&&card){card.open=true;card.hidden=false;card.scrollIntoView();}}
+    revealHash();window.addEventListener('hashchange',revealHash);
+  </script>
+</Layout>

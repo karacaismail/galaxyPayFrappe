@@ -1,0 +1,7 @@
+---
+import {getCollection,render} from 'astro:content';
+import DxLayout from '../../layouts/DxLayout.astro';
+export async function getStaticPaths(){return (await getCollection('v2')).map(doc=>({params:{slug:doc.id},props:{doc}}));}
+const {doc}=Astro.props;const {Content,headings}=await render(doc);
+---
+<DxLayout title={doc.data.title} description={doc.data.description} group={doc.data.group} active={doc.id} headings={headings}><Content/>{doc.id==='mobile'&&<details class="contents"><summary>Bu portalda yüklenen dosyaları incele</summary><p id="profile-status" role="status">Temel HTML kullanılabilir.</p><button id="inspect-assets" class="button" type="button" hidden>Yüklenen dosyaları incele</button><div id="asset-report" aria-live="polite"></div><p>Bu sayfa açılışının resource kayıtları; cache hitleri dahil. Dar ekran testi yeni açılışla yapılır.</p></details>}</DxLayout>

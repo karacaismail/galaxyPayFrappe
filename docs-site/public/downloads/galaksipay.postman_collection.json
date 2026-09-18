@@ -1,0 +1,330 @@
+{
+  "info": {
+    "name": "GalaksiPay · sandbox reference (not executed)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Public schema-based templates. Set secrets only in local environment; no live execution performed."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://testapi.galaksipay.com/galaksipay"
+    },
+    {
+      "key": "serverToken",
+      "value": ""
+    },
+    {
+      "key": "paymentId",
+      "value": ""
+    },
+    {
+      "key": "transactionNo",
+      "value": ""
+    },
+    {
+      "key": "startDate",
+      "value": ""
+    },
+    {
+      "key": "endDate",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "POST Kimlik doğrulama",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Authentication/Authenticate",
+        "description": "200 token gövdesi şemada tanımlı değil. Demo parser adayları resmi sözleşme sayılmaz. Başarılı ve hatalı sandbox fixture bekleniyor. Not executed; verify Q03.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"UserName\": \"<server-secret-user>\",\n  \"Password\": \"<server-secret-password>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "GET Alt satıcıları listele",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Merchant/GetSubMerchants",
+        "description": "SubMerchantDtoListApiResult. Id/IsActive/HasMasterpassSetting alanları şemada var; hesap kapsamı ve boş liste semantiği teyit bekliyor. Not executed; verify Q05.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST Ödeme başlat",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/Add",
+        "description": "TransactionDtoApiResult. HTTP 200 tahsilat başarısı değildir; Data.Id ve PaymentUrl doğrulanır. Örnek UUID atanmış merchant değildir. Not executed; verify Q02,Q04,Q08.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"OrderNo\": \"ORDER-SYNTHETIC-001\",\n  \"Amount\": 125.5,\n  \"CustomerFirstName\": \"Test\",\n  \"CustomerLastName\": \"Musteri\",\n  \"CustomerPhone\": \"<authorized-sandbox-phone>\",\n  \"SubMerchantId\": \"00000000-0000-4000-8000-000000000001\",\n  \"CallbackUrl\": \"https://sandbox.example.com/payments/callback\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "GET ID ile ödeme durumu",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/GetById/{{paymentId}}",
+        "description": "TransactionDtoApiResult. IsPaid, OrderNo, Amount, SubMerchantId/EffectiveMerchantId eşleşmeden yerel paid etkisi uygulanmaz. Not executed; verify Q02,Q06.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET İşlem numarasıyla sorgula",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/GetByTransactionNo/{{transactionNo}}",
+        "description": "TransactionNo int64, Id UUID ile aynı kavram değildir. Frontend numarayı string taşımalı; JS yuvarlamasıyla sorgu kurulmamalı. Not executed; verify Q02,Q06.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET Alternatif işlem sorgusu",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/Get/Get?id={{paymentId}}",
+        "description": "Şemadaki çift Get yazımı aynen korunur. Query id/transactionNo seçimi ve birlikte gönderme kuralı teyit edilir. Not executed; verify Q02,Q06.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET Tarih aralığı işlemleri",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/GetTransactionsByDateRange/{{startDate}}/{{endDate}}",
+        "description": "TransactionDtoListApiResult. Tarih sınırları, saat dilimi, sayfalama ve settlement kaynağı kesinleşmedi. Not executed; verify Q09.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST İade",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/MasterpassV2/Refund",
+        "description": "ObjectApiResult; Data için iş sonucu şeması ayrıntılı değil. Tutar alanı yok; kısmi iade desteği çıkarılamaz. AccessToken kimliği ayrıca teyitli olmalı. Not executed; verify Q07.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"AccessToken\": \"<provider-refund-token>\",\n  \"GalaksipayTransactionId\": \"00000000-0000-4000-8000-000000000002\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "POST İptal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/MasterpassV2/Void",
+        "description": "ObjectApiResult; izinli zaman penceresi ve tekrar güvenliği bilinmiyor. Siparişi iptal etmek banka işlemini iptal etmez. Not executed; verify Q07.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"AccessToken\": \"<provider-void-token>\",\n  \"GalaksipayTransactionId\": \"00000000-0000-4000-8000-000000000002\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "POST Taksit uygula",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/Transaction/ApplyInstallment",
+        "description": "Şemada var; hosted checkout içindeki sorumluluğu ve iş yetkisi teyit edilmeden çağrılmaz. Not executed; verify Q07,Q08.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{serverToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

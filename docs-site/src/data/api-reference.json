@@ -1,0 +1,184 @@
+[
+  {
+    "slug": "authenticate",
+    "method": "POST",
+    "path": "/api/Authentication/Authenticate",
+    "title": "Kimlik doğrulama",
+    "phase": "Core",
+    "unknowns": [
+      "Q03"
+    ],
+    "requestExample": {
+      "UserName": "<server-secret-user>",
+      "Password": "<server-secret-password>"
+    },
+    "responseNote": "200 token gövdesi şemada tanımlı değil. Demo parser adayları resmi sözleşme sayılmaz. Başarılı ve hatalı sandbox fixture bekleniyor.",
+    "tests": [
+      "CT_auth_shape",
+      "CT_auth_failure"
+    ]
+  },
+  {
+    "slug": "sub-merchants",
+    "method": "GET",
+    "path": "/api/Merchant/GetSubMerchants",
+    "title": "Alt satıcıları listele",
+    "phase": "Core / MVP",
+    "unknowns": [
+      "Q05"
+    ],
+    "requestExample": null,
+    "responseNote": "SubMerchantDtoListApiResult. Id/IsActive/HasMasterpassSetting alanları şemada var; hesap kapsamı ve boş liste semantiği teyit bekliyor.",
+    "tests": [
+      "CT_merchant_shape",
+      "IT_seller_isolation"
+    ]
+  },
+  {
+    "slug": "create-payment",
+    "method": "POST",
+    "path": "/api/Transaction/Add",
+    "title": "Ödeme başlat",
+    "phase": "MVP",
+    "unknowns": [
+      "Q02",
+      "Q04",
+      "Q08"
+    ],
+    "requestExample": {
+      "OrderNo": "ORDER-SYNTHETIC-001",
+      "Amount": 125.5,
+      "CustomerFirstName": "Test",
+      "CustomerLastName": "Musteri",
+      "CustomerPhone": "<authorized-sandbox-phone>",
+      "SubMerchantId": "00000000-0000-4000-8000-000000000001",
+      "CallbackUrl": "https://sandbox.example.com/payments/callback"
+    },
+    "responseNote": "TransactionDtoApiResult. HTTP 200 tahsilat başarısı değildir; Data.Id ve PaymentUrl doğrulanır. Örnek UUID atanmış merchant değildir.",
+    "tests": [
+      "IT_double_start",
+      "IT_unknown_add",
+      "CT_add_shape"
+    ]
+  },
+  {
+    "slug": "payment-status",
+    "method": "GET",
+    "path": "/api/Transaction/GetById/{id}",
+    "title": "ID ile ödeme durumu",
+    "phase": "MVP",
+    "unknowns": [
+      "Q02",
+      "Q06"
+    ],
+    "requestExample": null,
+    "responseNote": "TransactionDtoApiResult. IsPaid, OrderNo, Amount, SubMerchantId/EffectiveMerchantId eşleşmeden yerel paid etkisi uygulanmaz.",
+    "tests": [
+      "IT_callback_duplicate",
+      "CT_status_map"
+    ]
+  },
+  {
+    "slug": "transaction-number",
+    "method": "GET",
+    "path": "/api/Transaction/GetByTransactionNo/{transactionNo}",
+    "title": "İşlem numarasıyla sorgula",
+    "phase": "Operasyon",
+    "unknowns": [
+      "Q02",
+      "Q06"
+    ],
+    "requestExample": null,
+    "responseNote": "TransactionNo int64, Id UUID ile aynı kavram değildir. Frontend numarayı string taşımalı; JS yuvarlamasıyla sorgu kurulmamalı.",
+    "tests": [
+      "CT_int64",
+      "CT_status_map"
+    ]
+  },
+  {
+    "slug": "transaction-query",
+    "method": "GET",
+    "path": "/api/Transaction/Get/Get",
+    "title": "Alternatif işlem sorgusu",
+    "phase": "Operasyon",
+    "unknowns": [
+      "Q02",
+      "Q06"
+    ],
+    "requestExample": null,
+    "responseNote": "Şemadaki çift Get yazımı aynen korunur. Query id/transactionNo seçimi ve birlikte gönderme kuralı teyit edilir.",
+    "tests": [
+      "CT_query_parameters"
+    ]
+  },
+  {
+    "slug": "date-range",
+    "method": "GET",
+    "path": "/api/Transaction/GetTransactionsByDateRange/{startDate}/{endDate}",
+    "title": "Tarih aralığı işlemleri",
+    "phase": "Finans",
+    "unknowns": [
+      "Q09"
+    ],
+    "requestExample": null,
+    "responseNote": "TransactionDtoListApiResult. Tarih sınırları, saat dilimi, sayfalama ve settlement kaynağı kesinleşmedi.",
+    "tests": [
+      "IT_reconcile_late",
+      "CT_date_range"
+    ]
+  },
+  {
+    "slug": "refund",
+    "method": "POST",
+    "path": "/api/MasterpassV2/Refund",
+    "title": "İade",
+    "phase": "MVP sonrası",
+    "unknowns": [
+      "Q07"
+    ],
+    "requestExample": {
+      "AccessToken": "<provider-refund-token>",
+      "GalaksipayTransactionId": "00000000-0000-4000-8000-000000000002"
+    },
+    "responseNote": "ObjectApiResult; Data için iş sonucu şeması ayrıntılı değil. Tutar alanı yok; kısmi iade desteği çıkarılamaz. AccessToken kimliği ayrıca teyitli olmalı.",
+    "tests": [
+      "IT_refund_duplicate",
+      "IT_refund_unknown"
+    ]
+  },
+  {
+    "slug": "void",
+    "method": "POST",
+    "path": "/api/MasterpassV2/Void",
+    "title": "İptal",
+    "phase": "MVP sonrası",
+    "unknowns": [
+      "Q07"
+    ],
+    "requestExample": {
+      "AccessToken": "<provider-void-token>",
+      "GalaksipayTransactionId": "00000000-0000-4000-8000-000000000002"
+    },
+    "responseNote": "ObjectApiResult; izinli zaman penceresi ve tekrar güvenliği bilinmiyor. Siparişi iptal etmek banka işlemini iptal etmez.",
+    "tests": [
+      "IT_void_window",
+      "IT_refund_unknown"
+    ]
+  },
+  {
+    "slug": "installment",
+    "method": "POST",
+    "path": "/api/Transaction/ApplyInstallment",
+    "title": "Taksit uygula",
+    "phase": "Koşullu",
+    "unknowns": [
+      "Q07",
+      "Q08"
+    ],
+    "requestExample": null,
+    "responseNote": "Şemada var; hosted checkout içindeki sorumluluğu ve iş yetkisi teyit edilmeden çağrılmaz.",
+    "tests": [
+      "CT_installment_scope"
+    ]
+  }
+]

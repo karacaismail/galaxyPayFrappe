@@ -1,50 +1,45 @@
-# GalaksiPay Developer Hub
+# GalaksiPay DX docs v2.1
 
-[V2 / Frappe planı](https://karacaismail.github.io/galaxyPayFrappe/v2/) ve [V1 / referans seti](https://karacaismail.github.io/galaxyPayFrappe/), Astro ile GitHub Pages üzerinde yayınlanır. Bu repo **plan ve doküman sitesi** içerir; üretim ödeme uygulaması değildir.
+23 güncel doküman, 8 faz, 13 sprint ve 39 planlanmış RED test senaryosu. V1’in 42 sayfası tarihsel referanstır. Ürün kodu yok; bu repo Astro sitesi ve doküman kabul testlerini içerir.
 
-## Çalıştırma
+## Çalıştır
 
-Node 24 kullanılır; minimum sürüm `package.json` içinde. Bağımlılıklar lockfile ile sabittir.
+Node 24 ve lockfile kullanılır.
 
 ```sh
 npm ci
+npm run test:docs
 npm run dev
 npm run verify
-```
-
-Yerel: http://127.0.0.1:4321/v2/
-
-```sh
 SITE_BASE=/galaxyPayFrappe npm run verify
 SITE_BASE=/galaxyPayFrappe npm run preview -- --port 4322
 ```
 
-Pages benzeri önizleme: http://127.0.0.1:4322/galaxyPayFrappe/v2/
+Yerel `/v2/`; Pages benzeri preview `http://127.0.0.1:4322/galaxyPayFrappe/v2/`.
 
-## Düzenleme
+## Kaynak düzeni
 
 | Kaynak | Amaç |
 |---|---|
-| `src/content/v2/playbook.md` | Güncel Frappe mimarisi, 28 senaryo, 24 kart, mobil ve canlı kapıları |
-| `src/pages/v2/index.astro` | Ayrı V2 sayfası; başlıklardan üretilen gezinme |
-| `src/styles/v2.css` | 320 px ortak taban; her metin ≥1rem |
-| `src/scripts/adaptive/` | Küçük loader; koşullu compact/desktop import; resize cleanup |
-| `src/styles/adaptive/` | Profil CSS’leri; `?url` ile modül seçildikten sonra yüklenir |
-| `src/content/docs/*.md` | V1’in 42 referans dokümanı |
-| `src/data/roadmap.json` | V1’in 9 faz / 26 sprint / 78 kartı |
-| `src/lib/urls.ts`, `astro.config.mjs` | Astro ve Markdown bağlantılarında Pages base path |
-| `public/downloads/provider-contract.json` | Seçilmiş provider snapshotı; tam OpenAPI değil |
-| `scripts/export-docs.mjs` | V1 ve V2 Markdown indirilebilir paketleri |
-| `scripts/verify.mjs` | Link/anchor, kart/arama tutarlılığı, adaptive asset ayrımı |
+| `src/content/v2/` | Quickstart, test verisi, core, TDD, roadmap, callback, audit, mimari ve API sayfaları |
+| `src/data/development-plan.json` | Güncel faz/sprint/build/RED/fixture/evidence kaynağı; roadmap Markdown aynı değişiklikte güncellenir |
+| `src/data/test-cards.json` | Kaynak checksumuyla 18 sağlayıcı dummy kartı |
+| `src/data/api-reference.json` | 10 seçilmiş endpointin path/method/example/test/unknown kaydı |
+| `public/downloads/` | Tam OpenAPI, Postman, synthetic callback, test kartları, Markdown paketleri |
+| `src/layouts/DxLayout.astro` | Ortak görev odaklı doküman kabuğu |
+| `src/scripts/adaptive/` | Koşullu compact/desktop import; CSS `?url` ile mountta yüklenir |
+| `src/scripts/dx-search.ts` | Talep üzerine indeks yükler; güncel DX sayfalarını arar |
+| `tests/dx-contract.test.mjs` | Kaynak kartları, kritik DX görevleri, RED test kapsamı, endpoint/şema ve referans bütünlüğü |
+| `scripts/verify.mjs` | Build sonrası link/anchor, sprint/test izi, arama ve adaptive artifact kontrolleri |
 
-V1 genel araması Cmd/Ctrl+K ile V2 içeriğini de bulur. V2’de 13 bölümlük içerik listesi ve geniş ekranda ek gezinme vardır. V1 checklistleri tarayıcıya yereldir; resmi sprint kabulü değildir.
+Kök rota güncel `/v2/` merkezine yönlendirir. `/v1/` ve `/docs/` eski stack/takvim içeriklerini arşiv uyarısıyla korur. Aktif rota Frappe/MariaDB, Vue headless admin ve TypeScript/Vite/Flowbite/Tailwind/Alpine frontpages’tir.
 
-## Adaptive teslimi kontrol et
+## Test-first değişiklik
 
-Üretim buildini servis et. 320 px viewportu **sayfayı açmadan önce** seç; V2’de “Yüklenen dosyaları incele” düğmesine bas. Ortak JS/CSS + compact JS/CSS beklenir; desktop dosyaları olmamalıdır. 1280 px/fine pointer açılışında bunun tersi geçerlidir. Genişletip küçültme sonrası desktop DOM/listener kaldırılır; önceki indirmeler kaynak kaydında kalır.
+Önce kullanıcı gereksiniminin eksik olduğu durumda başarısız kabul testi yazıldı; ardından kart verisi, referanslar ve plan eklendi. `test:docs` gerçek ödeme testi değildir. Backend TDD ve sandbox UAT işleri `v2/tdd/` ile yol haritasında planlanmıştır.
 
-Astro’nun CSS toplamasını önlemek için modüller CSS’i statik yan etki importu olarak kullanmaz; `?url` assetini mount aşamasında ekler. Yalnız `media query` veya `cssCodeSplit` ayarına güvenilmez. Derleme kontrolü HTML’e profil CSS’inin sızmasını, ayrı JS/CSS artifactlerini ve her modülün kendi CSS URL’sini içerdiğini denetler. Ürün için tam cold-cache/HAR kabul testi V2 S0/S3 kapsamındadır.
+Kartlar yalnız kullanıcının verdiği sağlayıcı dummy test listesidir; finansal canlı veri değildir. Parola/token/kayıtlı cüzdan telefonu public fixturea eklenmez. Source checksum ve normalize kart hash’i verinin kazara değişmesini yakalar; yeni sağlayıcı listesi gelirse kaynak/metadata/test birlikte güncellenir.
 
-## Güven sınırı
+## Adaptive kontrol
 
-Kaynak ve Pages herkese açıktır. Bu statik site GalaksiPay hesabına giriş yapmaz ve ödeme/iade çağrısı göndermez. Orijinal demo, credentiallar ve test kartları git/build dışındadır. Noindex erişim kontrolü değildir. Ödeme API’si ve gerçek sandbox UAT gelecekteki sprint kapsamındadır; doküman build başarısı ödeme entegrasyonunun doğrulandığı anlamına gelmez.
+Production buildi servis et; gerçekten 320 CSS px viewport olduğuna bak. `/v2/mobile/` sayfasındaki dosya inceleme alanını aç: ortak + compact beklenir, desktop JS/CSS olmamalıdır. 1280/fine pointerda ek gezinme gerçekten yüklenir; küçültmede DOM/listener/CSS kaldırılır. Önce indirilmiş byte geri alınmaz. Kaynak kayıtları cache hitlerini de içerir; bu inceleme tam izole HAR testinin yerine geçmez.

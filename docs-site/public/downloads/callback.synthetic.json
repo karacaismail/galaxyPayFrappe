@@ -1,0 +1,19 @@
+{
+  "IsSuccess": true,
+  "Message": null,
+  "ErrorCode": null,
+  "Data": {
+    "Id": "00000000-0000-4000-8000-000000000002",
+    "TransactionNo": 12345,
+    "IsPaid": true,
+    "OrderNo": "ORDER-SYNTHETIC-001",
+    "MpOrderNo": null,
+    "Amount": 125.5,
+    "RrnNo": null,
+    "SlipNo": null,
+    "MerchantName": "Synthetic merchant",
+    "EffectiveMerchantName": "Synthetic merchant",
+    "TransactionStatusName": "<provider-status-to-confirm>",
+    "MasterpassErrorMessage": null
+  }
+}

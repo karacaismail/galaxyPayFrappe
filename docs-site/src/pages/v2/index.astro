@@ -1,67 +1,12 @@
 ---
-import { getEntry, render } from 'astro:content';
-import { withBase } from '../../lib/urls';
-import '../../styles/v2.css';
-const entry = await getEntry('v2', 'playbook');
-if (!entry) throw new Error('V2 playbook missing');
-const { Content, headings } = await render(entry);
-const sections = headings.filter(h => h.depth === 2);
-const anchor = (n: number) => `#${sections[n - 1].slug}`;
-const sprintAnchor = (prefix: string) => `#${headings.find(h=>h.depth === 3 && h.text.startsWith(prefix))!.slug}`;
-const phases = [
-  ['S0', 'MVP öncesi', 'Sözleşme + iskelet', '3–5 iş günü'],
-  ['S1–S3', 'MVP', 'Başlat → doğrula → pilot', '15 iş günü'],
-  ['S4–S5', 'MVP sonrası', 'Satıcı + finans', '2 sprint'],
-  ['S6', 'Dayanıklılık', 'Ölç → güçlendir', '5–10 iş günü'],
-  ['S7+', 'Enterprise', 'İhtiyaç + olgunluk kanıtı', 'İhtiyaca göre'],
-];
+import DxLayout from '../../layouts/DxLayout.astro';
+import {withBase} from '../../lib/urls';
+import plan from '../../data/development-plan.json';
+const links=[['quickstart','01 / İlk entegrasyon','Ortam → auth → merchant → ödeme linki → callback → sorgu.'],['test-data','02 / Test kartları','18 sağlayıcı test kartı; SKT, CVV, SMS ve cüzdan ayrımı.'],['api','03 / API referansı','Yöntem, yol, alanlar, cURL, yanıt şeması, retry ve açık sorular.'],['core-development','04 / Core development','MVP’den önce domain, izin, adapter ve gerçek DB testleri.'],['roadmap','05 / Core → maturity','Her sprintte ne yapılır, önce hangi test yazılır, neyle kapanır?'],['tdd','06 / Test first / TDD','RED → GREEN → REFACTOR; CI, mock ve sandbox kanıtları.']];
 ---
-<!doctype html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content={entry.data.description} />
-    <meta name="theme-color" content="#f6f8f7" />
-    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
-    <title>Frappe geliştirme rehberi · v2 · GalaksiPay</title>
-  </head>
-  <body>
-    <a class="skip" href="#main">İçeriğe geç</a>
-    <header class="site-header">
-      <a class="brand" href={withBase('/v2/')} aria-label="GalaksiPay v2 ana sayfa"><span class="brand-symbol" aria-hidden="true">g</span><span>galaksi<strong>pay</strong> <span class="edition">/ v2</span></span></a>
-      <nav class="header-links" aria-label="Sürümler ve kaynak"><a href={withBase('/')}>V1 arşivi ↗</a><a href="https://github.com/karacaismail/galaxyPayFrappe">GitHub ↗</a></nav>
-    </header>
-    <main id="main" class="page">
-      <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>GELİŞTİRİCİ REHBERİ · V2</p>
-        <h1 id="page-title">Frappe temeli.<br /><span>İlk güvenilir ödeme.</span></h1>
-        <p class="lead">Alıcıdan satıcıya, platformdan sağlayıcıya: küçük sprintlerle biten bir ödeme entegrasyonu.</p>
-        <div class="stack" aria-label="Teknoloji seçimi"><span>Frappe backend</span><span>Vue headless admin</span><span>TypeScript frontpages</span><span>320 px → fluid</span></div>
-        <div class="hero-actions"><a class="button primary" href={sprintAnchor('S0 ')}>S0’dan başla <span aria-hidden="true">↓</span></a><a class="button" href={withBase('/downloads/galaksipay-frappe-v2.md')} download>Markdown indir <span aria-hidden="true">↗</span></a></div>
-        <p class="scope-note">Bu yayın geliştirme planıdır. Ödeme backend’i ve ürün arayüzleri henüz uygulanmadı. Güncelleme: 18 Eylül 2026.</p>
-      </section>
-
-      <section aria-labelledby="route-title" class="route-section">
-        <div class="section-intro"><p class="eyebrow">BİTİRME ODAKLI ROTA</p><h2 id="route-title">Önce MVP. Sonra ihtiyaç kadar.</h2><p>İki geliştirici + yarı zamanlı QA varsayımıyla teknik MVP: <strong>18–20 iş günü</strong>. Sağlayıcı beklemeleri hariç; S1 sonunda yeniden tahmin edilir.</p></div>
-        <ol class="phase-track">{phases.map(([sprint, name, goal, time],i) => <li><a href={sprintAnchor(['S0 ','S1 ','S4 ','S6 ','S7+'][i])}><span class="phase-index">{String(i).padStart(2,'0')} / {sprint}</span><h3>{name}</h3><p>{goal}</p><span class="phase-time">{time}</span></a></li>)}</ol>
-      </section>
-
-      <section class="role-grid" aria-label="Senaryolar">
-        <a href={anchor(3)}><span class="card-label">01 / ALICI</span><h2>Öde ve sonucu gör.</h2><p>Sipariş, hosted checkout, doğrulanmış sonuç ve belirsiz işlem yolu.</p><span class="card-action">10 senaryoyu aç ↗</span></a>
-        <a href={anchor(4)}><span class="card-label">02 / SATICI</span><h2>Kendi tahsilatını izle.</h2><p>Aktivasyon, işlem listesi, destek ve sonraki aşamada iade talebi.</p><span class="card-action">9 senaryoyu aç ↗</span></a>
-        <a href={anchor(5)}><span class="card-label">03 / PLATFORM</span><h2>Belirsizliği yönet.</h2><p>Merchant eşleştirme, inceleme kuyruğu ve güvenli operasyon.</p><span class="card-action">9 senaryoyu aç ↗</span></a>
-      </section>
-
-      <section class="delivery-panel" aria-labelledby="delivery-title">
-        <div><p class="eyebrow">BU SAYFADA ÇALIŞAN ÖRNEK</p><h2 id="delivery-title">Ekrana uygun kod teslimi.</h2><p>Ortak içerik her ekranda. Geniş ekran + hassas işaretçide ek gezinme; diğer profillerde kompakt etkileşim. Her modül kendi CSS dosyasını yükler.</p></div>
-        <div class="delivery-proof"><p id="profile-status" role="status">JavaScript kapalıyken temel doküman kullanılabilir.</p><button class="button" id="inspect-assets" type="button" hidden>Yüklenen dosyaları incele</button><div id="asset-report" aria-live="polite"></div><p class="proof-note">Ölçüm bu sayfanın kaynak kayıtlarıdır. Ekranı küçültmek önceden indirilen dosyaları geri almaz; dar ekranda yeniden açarak kontrol edin.</p></div>
-      </section>
-
-      <details class="contents" id="contents"><summary>Rehber içeriği <span>13 bölüm</span></summary><nav aria-label="Bölüm listesi">{sections.map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>
-      <div class="document-shell" id="document-shell"><article class="prose" id="playbook"><Content /></article></div>
-    </main>
-    <footer class="site-footer"><p>GalaksiPay × Frappe <strong>/ v2</strong><br />Kaynakları ve açık kararlarıyla geliştirme planı.</p><div><a href={withBase('/')}>V1 doküman seti</a><a href={withBase('/docs/api-referansi/')}>Sağlayıcı API kaydı</a><a href="#main">Başa dön ↑</a></div></footer>
-    <script src="../../scripts/adaptive/index.ts"></script>
-  </body>
-</html>
+<DxLayout title="Geliştirici merkezi" description="İhtiyacın olan test verisi, API sözleşmesi ve geliştirme adımı tek yerde.">
+<div class="quick-links">{links.map(([slug,title,description])=><a href={withBase(`/v2/${slug}/`)}><strong>{title}</strong><p>{description}</p><span>Referansı aç →</span></a>)}</div>
+<h2 id="development-order">Geliştirme sırası</h2><ol class="phase-compact">{plan.phases.map(p=><li><a href={withBase(`/v2/roadmap/#${p.sprints[0].id.toLowerCase()}`)}><strong>{p.name}</strong><span>{p.sprints.map(s=>s.id).join(' · ')}</span></a></li>)}</ol>
+<h2 id="reference-downloads">İndirilebilir referanslar</h2><ul><li><a href={withBase('/downloads/provider-openapi.json')} download>Tam OpenAPI snapshotı · 40 path</a></li><li><a href={withBase('/downloads/galaksipay.postman_collection.json')} download>Postman koleksiyonu · 10 seçilmiş operasyon</a></li><li><a href={withBase('/downloads/test-cards.json')} download>18 sandbox kartı · JSON</a></li><li><a href={withBase('/downloads/callback.synthetic.json')} download>Synthetic callback fixture</a></li></ul>
+<h2 id="what-changed">Bu revizyonda ne düzeldi?</h2><p>Eksik kart kataloğu eklendi, API sayfalara ayrıldı, core development ilk faz oldu. Sprintler şimdi modül, RED testi, seed ve teslim kanıtıyla tanımlı. Önceki takvimler ve .NET önerisi <a href={withBase('/v1/')}>V1 arşivinde</a>.</p><p><a href={withBase('/v2/audit/')}>Eksik, gereksiz ve hâlâ teyit bekleyen bilgilerin tamamını incele →</a></p>
+</DxLayout>

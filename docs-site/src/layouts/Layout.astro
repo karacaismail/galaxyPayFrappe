@@ -18,7 +18,7 @@ const { title, description = 'GalaksiPay geliştirme yol haritası ve geliştiri
   <body>
     <a class="skip-link" href="#main">İçeriğe geç</a>
     <header class="topbar">
-      <a class="brand" href={withBase('/')} aria-label="GalaksiPay ana sayfa"><span class="brand-mark"><span></span></span><span>galaksi<span class="brand-pay">pay</span><span class="brand-docs"> / docs</span></span></a>
+      <a class="brand" href={withBase('/v2/')} aria-label="GalaksiPay ana sayfa"><span class="brand-mark"><span></span></span><span>galaksi<span class="brand-pay">pay</span><span class="brand-docs"> / docs</span></span></a>
       <div class="top-actions"><button class="search-open" aria-label="Dokümanlarda ara" aria-haspopup="dialog"><Icon name="search"/><span>Dokümanlarda ara</span><kbd>⌘ K</kbd></button><a class="top-api" href={withBase('/docs/api-referansi/')}>API referansı <Icon name="external" size={17}/></a><button class="icon-button" id="theme-toggle" aria-label="Renk temasını değiştir" title="Renk temasını değiştir"><Icon name="moon"/></button><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Gezinme menüsünü aç" aria-expanded="false" aria-controls="sidebar"><Icon name="menu"/></button></div>
     </header>
     <div class="shell">
@@ -26,12 +26,12 @@ const { title, description = 'GalaksiPay geliştirme yol haritası ve geliştiri
         <div class="workspace-label"><span class="tiny-mark">G</span><span>Entegrasyon rehberi<small>GalaksiPay × platformunuz</small></span></div>
         <nav>
           <a class="nav-home" href={withBase('/v2/')}><Icon name="code"/>Frappe · güncel v2 planı ↗</a>
-          <a class:list={['nav-home', { active: active === 'roadmap' }]} aria-current={active==='roadmap'?'page':undefined} href={withBase('/')}><Icon name="route"/>Geliştirme yol haritası</a>
+          <a class:list={['nav-home', { active: active === 'roadmap' }]} aria-current={active==='roadmap'?'page':undefined} href={withBase('/v1/')}><Icon name="route"/>Geliştirme yol haritası</a>
           {navigation.map(group=><div class="nav-group"><p>{group.title}</p>{group.items.map(([slug,label])=><a href={withBase(`/docs/${slug}/`)} class:list={{active: active === slug}} aria-current={active===slug?'page':undefined}>{label}{slug==='ai-playbook'&&<span class="nav-dot"/>}</a>)}</div>)}
         </nav>
         <a class="sidebar-bottom" href={withBase('/downloads/galaksipay-playbook.md')} download><Icon name="download"/><span>Doküman paketini indir<small>Markdown · tüm plan</small></span></a>
       </aside>
-      <div class="main-wrap"><main id="main"><slot/></main><footer class="footer"><span>GalaksiPay Developer Hub <span class="footer-divider">/</span> v1.0</span><span>Son inceleme · 18 Eylül 2026</span></footer></div>
+      <div class="main-wrap"><main id="main"><div class="plan-note"><p><strong>V1 arşivi.</strong> Bu sayfanın stack/takvim önerisi güncel değildir. <a href={withBase('/v2/')}>Frappe geliştirici dokümanına geç →</a></p></div><slot/></main><footer class="footer"><span>GalaksiPay Developer Hub <span class="footer-divider">/</span> v1.0</span><span>Son inceleme · 18 Eylül 2026</span></footer></div>
     </div>
     <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-header"><Icon name="search"/><label class="sr-only" id="search-title" for="search-input">Dokümanlarda ara</label><input id="search-input" type="search" placeholder="Callback, MVP, idempotency…" autocomplete="off"/><button id="search-close" class="close-button" aria-label="Aramayı kapat">Esc</button></div><p id="search-status" role="status">Bir konu veya sprint numarası yazın.</p><div id="search-results"></div><div class="search-footer">Gezinmek için Tab · Açmak için Enter</div></dialog>
     <script>

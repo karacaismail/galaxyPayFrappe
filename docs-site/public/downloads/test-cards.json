@@ -1,0 +1,153 @@
+{
+  "source": "Sağlayıcının GalaksiPay_Test_Kartları.txt eki",
+  "sourceSha256": "3b3e4da87dd4acea73abb81dce9330a784e1715010941a596098bdd64ff292f2",
+  "reviewedAt": "2026-09-18",
+  "environment": "sandbox-only",
+  "executionStatus": "not-run",
+  "cards": [
+    {
+      "id": "CARD-01",
+      "pan": "6060432073705005",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-02",
+      "pan": "5167400000496745",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-03",
+      "pan": "4256691944867646",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-04",
+      "pan": "4284624140544525",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-05",
+      "pan": "4985170000702810",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-06",
+      "pan": "4356292313685179",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-07",
+      "pan": "5218487962459752",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-08",
+      "pan": "5200190005138652",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-09",
+      "pan": "5269737320050521",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-10",
+      "pan": "4446763125813623",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-11",
+      "pan": "6060433087290190",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-12",
+      "pan": "4799150896081734",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-13",
+      "pan": "5377193762823307",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-14",
+      "pan": "5200190059838710",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-15",
+      "pan": "5163103002982563",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-16",
+      "pan": "5486742060635314",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-17",
+      "pan": "5200190011811433",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    },
+    {
+      "id": "CARD-18",
+      "pan": "4090700100360047",
+      "sourceExpiry": "2612",
+      "expiry": "12/26",
+      "cvv": "000",
+      "otp": "123456"
+    }
+  ]
+}

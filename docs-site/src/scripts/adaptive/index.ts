@@ -59,3 +59,12 @@ document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre => {
   });
   controls.append(button); pre.after(controls);
 });
+
+document.querySelectorAll<HTMLButtonElement>('[data-copy-card]').forEach(button=>{
+ button.hidden=false;
+ button.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(button.dataset.copyCard || '');button.textContent='Kopyalandı';}
+  catch{button.textContent='Metni seçin';}
+  setTimeout(()=>button.textContent='Kopyala',2000);
+ });
+});

@@ -1,0 +1,20 @@
+---
+import '../styles/v2.css';
+import {withBase} from '../lib/urls';
+import {dxNavigation} from '../data/dx-navigation';
+interface Props {title:string;description:string;active?:string;group?:string;headings?:{depth:number;slug:string;text:string}[];}
+const {title,description,active='',group='Geliştirici merkezi',headings=[]}=Astro.props;
+---
+<!doctype html><html lang="tr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><meta name="description" content={description}/><meta name="theme-color" content="#f6f8f7"/><link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml"/><title>{title} · GalaksiPay DX</title></head><body>
+<a class="skip" href="#main">İçeriğe geç</a>
+<header class="site-header"><a class="brand" href={withBase('/v2/')}><span class="brand-symbol" aria-hidden="true">g</span><span>galaksi<strong>pay</strong><span class="edition"> / developer docs</span></span></a><nav class="header-links" aria-label="Kaynaklar"><a href={withBase('/v1/')}>V1 arşivi</a><a href="https://github.com/karacaismail/galaxyPayFrappe">GitHub ↗</a></nav></header>
+<div class="page">
+<details class="contents docs-navigation" id="docs-navigation"><summary>Dokümantasyon menüsü</summary><nav id="docs-nav-source" aria-label="Geliştirici dokümanları">{dxNavigation.map(section=><div><p class="nav-label">{section.title}</p>{section.items.map(([slug,label])=><a href={withBase(`/v2/${slug?slug+'/':''}`)} aria-current={active===slug?'page':undefined}>{label}</a>)}</div>)}</nav></details>
+<form class="dx-search" role="search"><label for="dx-query">Dokümanlarda ara</label><input id="dx-query" name="q" type="search" placeholder="Test kartı, callback, core…" autocomplete="off"/><p id="dx-search-status" role="status"></p><div id="dx-search-results"></div></form>
+<main id="main"><div class="document-shell" id="document-shell"><article id="playbook" class="prose"><div class="eyebrow">{group}</div><h1>{title}</h1><p class="lead">{description}</p><p class="scope-note">v2.1 · Güncel Frappe planı · Şema/doküman doğrulandı; ödeme uygulaması henüz geliştirilmedi, sandbox UAT çalıştırılmadı.</p>
+{headings.some(h=>h.depth===2)&&<details class="contents" id="contents"><summary>Bu sayfada</summary><nav aria-label="Bölümler">{headings.filter(h=>h.depth===2).map(h=><a href={`#${h.slug}`}>{h.text}</a>)}</nav></details>}
+<slot/>
+</article></div></main>
+</div><footer class="site-footer"><p>GalaksiPay × Frappe / developer docs</p><div><a href={withBase('/downloads/galaksipay-frappe-v2.md')} download>Doküman paketini indir</a><a href={withBase('/v2/audit/')}>Doğrulama ve eksikler</a><a href="#main">Başa dön ↑</a></div></footer>
+<script src="../scripts/adaptive/index.ts"></script><script src="../scripts/dx-search.ts"></script>
+</body></html>
