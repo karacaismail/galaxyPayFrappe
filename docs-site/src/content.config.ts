@@ -5,4 +5,8 @@ const docs = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/docs' }),
   schema: z.object({ title: z.string(), description: z.string(), group: z.string() }),
 });
-export const collections = { docs };
+const v2 = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/v2' }),
+  schema: z.object({ title: z.string(), description: z.string(), group: z.string() }),
+});
+export const collections = { docs, v2 };

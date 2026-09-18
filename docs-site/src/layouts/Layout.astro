@@ -25,6 +25,7 @@ const { title, description = 'GalaksiPay geliştirme yol haritası ve geliştiri
       <aside class="sidebar" id="sidebar" aria-label="Dokümantasyon gezinmesi">
         <div class="workspace-label"><span class="tiny-mark">G</span><span>Entegrasyon rehberi<small>GalaksiPay × platformunuz</small></span></div>
         <nav>
+          <a class="nav-home" href={withBase('/v2/')}><Icon name="code"/>Frappe · güncel v2 planı ↗</a>
           <a class:list={['nav-home', { active: active === 'roadmap' }]} aria-current={active==='roadmap'?'page':undefined} href={withBase('/')}><Icon name="route"/>Geliştirme yol haritası</a>
           {navigation.map(group=><div class="nav-group"><p>{group.title}</p>{group.items.map(([slug,label])=><a href={withBase(`/docs/${slug}/`)} class:list={{active: active === slug}} aria-current={active===slug?'page':undefined}>{label}{slug==='ai-playbook'&&<span class="nav-dot"/>}</a>)}</div>)}
         </nav>

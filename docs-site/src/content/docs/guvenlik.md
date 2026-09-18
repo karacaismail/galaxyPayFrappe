@@ -27,7 +27,7 @@ Telefon, ad/soyad ve işlem referansları amaç ve rol bazlı işlenir. Doküman
 
 PaymentUrl token taşıyabilir; `Referrer-Policy: no-referrer`, üçüncü taraf script minimizasyonu ve token redaction kullan. API response’da ham MasterpassResponseRawJson, credential veya auth token dönme. Cookie kullanılıyorsa Secure/HttpOnly ve iş akışına uygun SameSite belirle. Callbackin CSRF istisnası kullanıcı komutlarına yayılmamalı; callback ayrı kimlik doğrulama modeline sahip.
 
-Portal statik içeriktir; robots noindex erişim kontrolü sayılmaz. İç dokümanı internet üzerinde yayınlamak istenirse host seviyesinde kimlik/erişim politikası gerekir. Bu teslim yalnızca localhostta açılır.
+Portal statik ve herkese açık bir geliştirme planıdır; GitHub Pages üzerinde yayınlanır. Robots noindex erişim kontrolü sayılmaz. Özel dokümanlar için host seviyesinde kimlik/erişim politikası gerekir. Demo credentialları, test kartları ve özel kaynak dosyaları yayına dahil değildir.
 
 ## Erişilebilirlik kalite hedefi
 

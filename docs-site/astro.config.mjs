@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 const base = process.env.SITE_BASE || '/';
 function prefixMarkdownLinks() {
   return tree => {
@@ -13,5 +14,6 @@ function prefixMarkdownLinks() {
 }
 export default defineConfig({
   site: 'https://karacaismail.github.io', base, trailingSlash: 'always', output: 'static',
-  devToolbar: { enabled: false }, markdown: { remarkPlugins: [prefixMarkdownLinks] },
+  devToolbar: { enabled: false }, markdown: { processor: unified({ remarkPlugins: [prefixMarkdownLinks] }) },
+  vite: { build: { cssCodeSplit: true, modulePreload: false, assetsInlineLimit: 0 } },
 });

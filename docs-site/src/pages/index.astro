@@ -5,6 +5,7 @@ import Icon from '../components/Icon.astro';
 import roadmap from '../data/roadmap.json';
 ---
 <Layout title="Geliştirme yol haritası" active="roadmap">
+  <div class="plan-note"><span class="note-icon">↗</span><p><strong>Güncel geliştirme rotası: Frappe v2.</strong> Frappe backend, Vue admin, TypeScript frontpages ve 320 px adaptive planı ayrı sayfada. Bu v1 seti önceki mimari ve ayrıntılı kontrol referansıdır. <a href={withBase('/v2/')}>V2 rehberine geç →</a></p></div>
   <div class="breadcrumb"><span>Geliştirici merkezi</span><Icon name="chevron" size={16}/><span>Yol haritası</span></div>
   <section class="hero">
     <div class="hero-copy"><div class="eyebrow"><span class="accent-line"></span>PLANLA. GELİŞTİR. DOĞRULA.</div><h1>İlk ödemeden<br/><span>kurumsal olgunluğa.</span></h1><p>GalaksiPay entegrasyonu için geliştirme yol haritası.<br class="desktop-break"/>Net kapsam, küçük sprintler, kanıta dayalı ilerleme.</p><div class="hero-actions"><a class="button primary" href={withBase('/docs/sprint-01/')}>Sprint 01 ile başla<Icon name="arrow"/></a><a class="button secondary" href={withBase('/docs/baslangic/')}><Icon name="book"/>Rehberi oku</a></div></div>

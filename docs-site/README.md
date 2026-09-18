@@ -1,37 +1,50 @@
 # GalaksiPay Developer Hub
 
-Astro ile Türkçe geliştirici dokümantasyonu: 9 faz, 26 sprint, 78 iş kartı, 42 doküman. Kaynak demo kodu, kullanıcı yazışması ve 18 Eylül 2026 test OpenAPI şeması temel alınmıştır. Bu repo **plan ve doküman sitesi** içerir; üretim ödeme uygulaması değildir.
+[V2 / Frappe planı](https://karacaismail.github.io/galaxyPayFrappe/v2/) ve [V1 / referans seti](https://karacaismail.github.io/galaxyPayFrappe/), Astro ile GitHub Pages üzerinde yayınlanır. Bu repo **plan ve doküman sitesi** içerir; üretim ödeme uygulaması değildir.
 
 ## Çalıştırma
 
-Node 24 (minimum 22.12) ve npm 9.6.5+.
+Node 24 kullanılır; minimum sürüm `package.json` içinde. Bağımlılıklar lockfile ile sabittir.
 
 ```sh
 npm ci
 npm run dev
+npm run verify
 ```
 
-http://localhost:4321
+Yerel: http://127.0.0.1:4321/v2/
 
 ```sh
-npm run verify
-npm run preview
+SITE_BASE=/galaxyPayFrappe npm run verify
+SITE_BASE=/galaxyPayFrappe npm run preview -- --port 4322
 ```
+
+Pages benzeri önizleme: http://127.0.0.1:4322/galaxyPayFrappe/v2/
 
 ## Düzenleme
 
-- `src/content/docs/*.md`: dokümanlar ve sprint ayrıntıları.
-- `src/data/roadmap.json`: faz ve sprint kartlarının tek veri kaynağı; ID/başlık değişince ilgili Markdown sayfasını da güncelle.
-- `src/data/navigation.ts`: gezinme.
-- `src/styles/global.css`: arayüz; tüm metinler en az 1rem.
-- `public/downloads/provider-contract.json`: seçilmiş provider sözleşme snapshotı (tam OpenAPI değil).
-- `scripts/export-docs.mjs`: Markdown paketi her buildde oluşturulur.
-- `scripts/verify.mjs`: build sonrası iç bağlantı, anchor ve plan tutarlılığı kontrolleri.
+| Kaynak | Amaç |
+|---|---|
+| `src/content/v2/playbook.md` | Güncel Frappe mimarisi, 28 senaryo, 24 kart, mobil ve canlı kapıları |
+| `src/pages/v2/index.astro` | Ayrı V2 sayfası; başlıklardan üretilen gezinme |
+| `src/styles/v2.css` | 320 px ortak taban; her metin ≥1rem |
+| `src/scripts/adaptive/` | Küçük loader; koşullu compact/desktop import; resize cleanup |
+| `src/styles/adaptive/` | Profil CSS’leri; `?url` ile modül seçildikten sonra yüklenir |
+| `src/content/docs/*.md` | V1’in 42 referans dokümanı |
+| `src/data/roadmap.json` | V1’in 9 faz / 26 sprint / 78 kartı |
+| `src/lib/urls.ts`, `astro.config.mjs` | Astro ve Markdown bağlantılarında Pages base path |
+| `public/downloads/provider-contract.json` | Seçilmiş provider snapshotı; tam OpenAPI değil |
+| `scripts/export-docs.mjs` | V1 ve V2 Markdown indirilebilir paketleri |
+| `scripts/verify.mjs` | Link/anchor, kart/arama tutarlılığı, adaptive asset ayrımı |
 
-Arama tüm belgelerin içeriğini kapsar (Cmd/Ctrl+K). Faz filtreleri ve sprint açılır panelleri çalışır. Tema ve sprint hazırlık kutuları sadece yerel tarayıcıda saklanır; ekip proje yönetim sistemi değildir. Checklistler resmi kabul durumunu değiştirmez.
+V1 genel araması Cmd/Ctrl+K ile V2 içeriğini de bulur. V2’de 13 bölümlük içerik listesi ve geniş ekranda ek gezinme vardır. V1 checklistleri tarayıcıya yereldir; resmi sprint kabulü değildir.
+
+## Adaptive teslimi kontrol et
+
+Üretim buildini servis et. 320 px viewportu **sayfayı açmadan önce** seç; V2’de “Yüklenen dosyaları incele” düğmesine bas. Ortak JS/CSS + compact JS/CSS beklenir; desktop dosyaları olmamalıdır. 1280 px/fine pointer açılışında bunun tersi geçerlidir. Genişletip küçültme sonrası desktop DOM/listener kaldırılır; önceki indirmeler kaynak kaydında kalır.
+
+Astro’nun CSS toplamasını önlemek için modüller CSS’i statik yan etki importu olarak kullanmaz; `?url` assetini mount aşamasında ekler. Yalnız `media query` veya `cssCodeSplit` ayarına güvenilmez. Derleme kontrolü HTML’e profil CSS’inin sızmasını, ayrı JS/CSS artifactlerini ve her modülün kendi CSS URL’sini içerdiğini denetler. Ürün için tam cold-cache/HAR kabul testi V2 S0/S3 kapsamındadır.
 
 ## Güven sınırı
 
-Bu statik site hiçbir GalaksiPay hesabına giriş yapmaz ve ödeme/iade çağrısı göndermez. Orijinal demo, credentiallar ve test kartları `public` veya build içine eklenmez. Sağlayıcı davranışının doğrulanmamış kısımları açık soru olarak kayıtlıdır. Site noindex içerir; bu erişim kontrolü değildir. Dış yayın için host tarafında erişim politikasını belirleyin.
-
-Ödeme API uygulaması ve onun testleri gelecekteki sprint kapsamıdır. Doküman build başarısı ödeme entegrasyonunun test edildiği anlamına gelmez.
+Kaynak ve Pages herkese açıktır. Bu statik site GalaksiPay hesabına giriş yapmaz ve ödeme/iade çağrısı göndermez. Orijinal demo, credentiallar ve test kartları git/build dışındadır. Noindex erişim kontrolü değildir. Ödeme API’si ve gerçek sandbox UAT gelecekteki sprint kapsamındadır; doküman build başarısı ödeme entegrasyonunun doğrulandığı anlamına gelmez.
