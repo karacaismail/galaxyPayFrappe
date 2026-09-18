@@ -1,0 +1,1025 @@
+{
+  "phases": [
+    {
+      "id": 1,
+      "name": "MVP",
+      "title": "Güvenilir ilk ödeme",
+      "range": "S01–S04",
+      "duration": "8 hafta",
+      "track": "Temel",
+      "description": "Tek satıcıdan başlayan, sunucuda doğrulanan ve izlenebilen ödeme akışı.",
+      "gate": "Sandbox uçtan uca kanıt + sınırlı üretim pilotu için G1 kapısı.",
+      "tags": [
+        "Hosted checkout",
+        "Güvenli callback",
+        "Durum sorgusu"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Post-MVP",
+      "title": "Deneyimi tamamla",
+      "range": "S05–S07",
+      "duration": "6 hafta",
+      "track": "Temel",
+      "description": "Gerçek satıcıların katılımını, kayıtlı kart deneyimini ve destek görünürlüğünü tamamla.",
+      "gate": "İki farklı satıcının izolasyonu ve cüzdan / doğrudan kart UAT kanıtı.",
+      "tags": [
+        "Satıcı onboarding",
+        "Cüzdan UAT",
+        "Operasyon paneli"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Finansal operasyon",
+      "title": "Her işlemi açıklayabil",
+      "range": "S08–S10",
+      "duration": "6 hafta",
+      "track": "Ölçek",
+      "description": "İade, iptal ve günlük mutabakatı kontrollü iş akışlarına dönüştür.",
+      "gate": "İade tekrarında çift işlem yok; günlük farklar sahipli bir kuyruğa düşüyor.",
+      "tags": [
+        "İade & iptal",
+        "Mutabakat",
+        "Raporlama"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Dayanıklılık",
+      "title": "Yük altında güven ver",
+      "range": "S11–S13",
+      "duration": "6 hafta",
+      "track": "Ölçek",
+      "description": "Kuyrukları, performansı ve felaket kurtarmayı ölçülebilir hale getir.",
+      "gate": "Onaylı yük profili, geri yükleme tatbikatı ve kesinti senaryosu başarılı.",
+      "tags": [
+        "Outbox & worker",
+        "Yük testleri",
+        "Felaket kurtarma"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Güvenlik & yönetişim",
+      "title": "Kontrolleri kanıtla",
+      "range": "S14–S16",
+      "duration": "6 hafta",
+      "track": "Kurumsal",
+      "description": "İleri tehdit testleri, veri yaşam döngüsü ve denetim kanıtlarını tamamla.",
+      "gate": "Kritik/yüksek açıklar kapalı; kapsam, saklama ve erişim kararları sahipli.",
+      "tags": [
+        "Tehdit modeli",
+        "Veri yönetişimi",
+        "Denetim izi"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Platform & DX",
+      "title": "Geliştirmeyi hızlandır",
+      "range": "S17–S19",
+      "duration": "6 hafta",
+      "track": "Ölçek",
+      "description": "Sözleşme değişimini, kurulum deneyimini ve genişletilebilirliği standartlaştır.",
+      "gate": "Yeni geliştirici temiz ortamda ≤30 dakikada ilk mock ödemeyi tamamlıyor.",
+      "tags": [
+        "Contract pipeline",
+        "SDK & fixture",
+        "Geliştirici portalı"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Enterprise grade",
+      "title": "Kurumsal işletime geç",
+      "range": "S20–S22",
+      "duration": "6 hafta",
+      "track": "Kurumsal",
+      "description": "Kurumsal kimlik, görev ayrılığı, tenant politikaları ve hizmet yönetimi.",
+      "gate": "SSO/MFA, erişim gözden geçirmesi ve işletim sorumlulukları doğrulandı.",
+      "tags": [
+        "SSO & SCIM keşfi",
+        "Tenant politikaları",
+        "Hizmet yönetimi"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Maturity ready",
+      "title": "Olgunluğu ölç ve sürdür",
+      "range": "S23–S25",
+      "duration": "6 hafta",
+      "track": "Kurumsal",
+      "description": "Bağımsız kanıtlarla ürün, finans ve operasyon olgunluğunu değerlendir.",
+      "gate": "90 günlük ölçüm penceresi + açık bulgular için sorumlu ve süre.",
+      "tags": [
+        "Olgunluk skoru",
+        "Kaos tatbikatı",
+        "Bağımsız inceleme"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Sürekli gelişim",
+      "title": "Öğren, sadeleştir, yinele",
+      "range": "S26",
+      "duration": "2 hafta / döngü",
+      "track": "Sürekli",
+      "description": "Ölçülen ihtiyaçlara göre yeni kabiliyetler ve teknik borç yatırımı.",
+      "gate": "Her yeni yatırım için hipotez, maliyet, deney ve durdurma kriteri.",
+      "tags": [
+        "Ürün deneyleri",
+        "Teknik borç",
+        "Çeyreklik plan"
+      ]
+    }
+  ],
+  "sprints": [
+    {
+      "id": "S01",
+      "number": 1,
+      "phase": 1,
+      "title": "Sözleşme, sınırlar ve geliştirme temeli",
+      "dependency": "Başlangıç",
+      "owner": "BE + FE / TL",
+      "blocker": "Güncel doküman 2.3 ve sağlayıcı soru listesi; cevap beklerken mock ile ilerlenir.",
+      "stories": [
+        {
+          "id": "GP-011",
+          "title": "Sözleşme envanteri",
+          "description": "OpenAPI anlık görüntüsünü sürümle; auth, Add, GetById ve callback fixture sınırlarını kaydet.",
+          "acceptance": "Şema değişikliği diff olarak görülebilir; bilinmeyenler Q kayıtlarına bağlı.",
+          "days": 3
+        },
+        {
+          "id": "GP-012",
+          "title": "Repo ve secret sınırı",
+          "description": "Yeni uygulama katmanlarını planla; credential alanlarını üretim tasarımından çıkar; config, mock ve CI iskeletini kur.",
+          "acceptance": "Temiz checkout kurulabilir; tarayıcı bundle ve log taramasında test secret değeri bulunmaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-013",
+          "title": "Domain ve veri sözlüğü",
+          "description": "Order, PaymentAttempt, MerchantMapping ve Inbox modellerini; para hassasiyeti ve durum geçişlerini tanımla.",
+          "acceptance": "İki eşzamanlı denemede sipariş başına aktif girişim kısıtı tasarımı ve migration testi var.",
+          "days": 3
+        }
+      ],
+      "evidence": "Yerel mock ödeme, CI çıktısı, 4 ADR ve açık soru kaydı.",
+      "slug": "sprint-01"
+    },
+    {
+      "id": "S02",
+      "number": 2,
+      "phase": 1,
+      "title": "Ödemeyi güvenle başlat",
+      "dependency": "S01",
+      "owner": "BE + FE",
+      "blocker": "Auth yanıtı, token TTL ve izinli ödeme hostları teyidi.",
+      "stories": [
+        {
+          "id": "GP-021",
+          "title": "Sunucu auth adaptörü",
+          "description": "Test secret store, kısıtlı token cache, timeout ve hata sınıflandırmasını uygula.",
+          "acceptance": "Token istemciye dönmez; bozuk auth cevabı başarı sayılmaz; 401 döngüsü oluşmaz.",
+          "days": 3
+        },
+        {
+          "id": "GP-022",
+          "title": "Idempotent ödeme oluşturma",
+          "description": "Sipariş toplamını sunucudan al; merchant eşleşmesini doğrula; intenti önce kaydet; Add sonucunu ilişkilendir.",
+          "acceptance": "Aynı anahtar ve gövde aynı attempti döndürür; farklı gövde 409; belirsiz Add otomatik tekrarlanmaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-023",
+          "title": "Hosted checkout UX",
+          "description": "PaymentUrl allowlist, popup engeli için aynı linke yönlendirme ve pending ekranını uygula.",
+          "acceptance": "Popup kapanması başarısız ödeme sayılmaz; tekrar tıklama ikinci işlem oluşturmaz.",
+          "days": 3
+        }
+      ],
+      "evidence": "Dummy merchant ile ödeme linki ve kalıcı attempt kaydı.",
+      "slug": "sprint-02"
+    },
+    {
+      "id": "S03",
+      "number": 3,
+      "phase": 1,
+      "title": "Callback ve durum doğrulaması",
+      "dependency": "S02",
+      "owner": "BE + QA",
+      "blocker": "Q01 callback doğrulama/retry; Q02 ID semantiği; canlı geçiş için gerekli.",
+      "stories": [
+        {
+          "id": "GP-031",
+          "title": "Callback inbox",
+          "description": "Boyut ve şema kontrolü; kalıcı inbox; olay tekilleştirme; ham gövde için kontrollü erişim uygula.",
+          "acceptance": "Aynı bildirim 100 kez gelince 1 iş etkisi; DB yazımı başarısızsa başarı ACK verilmez.",
+          "days": 3
+        },
+        {
+          "id": "GP-032",
+          "title": "Yetkili durum doğrulaması",
+          "description": "GetById ile OrderNo, Amount, merchant ve ID eşleşmesini kontrol et; onaylı durum makinesini uygula.",
+          "acceptance": "Sahte callback/postMessage siparişi paid yapamaz; eşleşmeyen tutar inceleme kuyruğuna gider.",
+          "days": 4
+        },
+        {
+          "id": "GP-033",
+          "title": "Kayıp/ters sıralı olay kurtarma",
+          "description": "Sınırlı backoff, jitter ve reconciliation job; read-only müşteri durum endpointi ekle.",
+          "acceptance": "Callback yokken sorgu ile sonuç bulunur; geç pending başarılı ödemeyi geriye götürmez.",
+          "days": 3
+        }
+      ],
+      "evidence": "Doğrulanmış sonuç; yinelenen, sahte ve kayıp callback test kanıtları.",
+      "slug": "sprint-03"
+    },
+    {
+      "id": "S04",
+      "number": 4,
+      "phase": 1,
+      "title": "MVP kabulü ve kontrollü pilot",
+      "dependency": "S03",
+      "owner": "QA + TL + PO / Platform",
+      "blocker": "G1 için satıcı aktivasyonu, üretim kimliği ve güvenlik mutabakatı.",
+      "stories": [
+        {
+          "id": "GP-041",
+          "title": "E2E ve UAT",
+          "description": "Doğrudan kart, 3DS, başarısız işlem, ağ kaybı, popup engeli ve yetkisiz satıcı senaryolarını çalıştır.",
+          "acceptance": "TC01–TC16 kabul paketi geçer; unresolved P0/P1 yok; gerçek ödeme testi ayrı kontrollü UAT planında.",
+          "days": 3
+        },
+        {
+          "id": "GP-042",
+          "title": "İşletim asgarisi",
+          "description": "Dashboard, korelasyon ID, callback gecikme alarmı, yedek ve geri alma yönergesi hazırla.",
+          "acceptance": "Nöbet sorumlusu alarmı alır; yedekten test geri yükleme ve eski sürüme dönüş gösterilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-043",
+          "title": "Go/no-go ve pilot",
+          "description": "G1 kanıtlarını topla; düşük limitli tek satıcı pilotu ve kill switch prosedürünü hazırla.",
+          "acceptance": "PO/TL/operasyon onayı kayıtlı; kapı eksikse sürüm sandbox MVP olarak kalır.",
+          "days": 3
+        }
+      ],
+      "evidence": "MVP sürüm paketi; G1 karar tutanağı ve pilot gözlem raporu.",
+      "slug": "sprint-04"
+    },
+    {
+      "id": "S05",
+      "number": 5,
+      "phase": 2,
+      "title": "Satıcı onboarding ve izolasyon",
+      "dependency": "S04",
+      "owner": "BE + FE / Operasyon",
+      "blocker": "Eksik 2.3 belgesi ve sağlayıcı gerçek satıcı tanımı.",
+      "stories": [
+        {
+          "id": "GP-051",
+          "title": "Onboarding akışı",
+          "description": "2.3 alanlarını teyitli şemayla topla; taslak, gönderildi, incelemede ve aktif durumları oluştur.",
+          "acceptance": "Alan listesi uydurulmaz; eksik evrak ve red gerekçesi görünür.",
+          "days": 3
+        },
+        {
+          "id": "GP-052",
+          "title": "Merchant eşleşmesi",
+          "description": "Tenant–yerel satıcı–SubMerchantId bağını ve IsActive/HasMasterpassSetting kontrollerini ekle.",
+          "acceptance": "Başka tenant ID’siyle ödeme ve listeleme reddedilir; ana merchant fallback sessiz çalışmaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-053",
+          "title": "Aktivasyon UAT",
+          "description": "İki gerçek veya onaylı dummy satıcıyla ayrık ödeme ve audit akışını çalıştır.",
+          "acceptance": "Her işlem doğru effective merchant ile eşleşir; deaktivasyon yeni girişimi durdurur.",
+          "days": 3
+        }
+      ],
+      "evidence": "Onboarding kontrol listesi ve iki satıcılı izolasyon kanıtı.",
+      "slug": "sprint-05"
+    },
+    {
+      "id": "S06",
+      "number": 6,
+      "phase": 2,
+      "title": "Cüzdan ve ödeme deneyimi",
+      "dependency": "S05",
+      "owner": "FE + QA / BE",
+      "blocker": "Sağlayıcıya ait test cüzdan hesabı ve erişim desteği.",
+      "stories": [
+        {
+          "id": "GP-061",
+          "title": "Cüzdan UAT",
+          "description": "İzinli test hesabıyla kayıtlı kart ve doğrudan kart yollarını ayır; kart verisini uygulamada toplama.",
+          "acceptance": "Her iki yol ayrı test sonucu üretir; test telefonları yayınlanan fixturelara girmez.",
+          "days": 3
+        },
+        {
+          "id": "GP-062",
+          "title": "Dayanıklı müşteri UX",
+          "description": "Mobil yönlendirme, sekme kapanması, geri dönüş ve sayfa yenilemede attempt devamlılığını uygula.",
+          "acceptance": "Kullanıcı pending sonucu görür; başarısızlık ve bilinmeyen durum farklı açıklanır.",
+          "days": 4
+        },
+        {
+          "id": "GP-063",
+          "title": "Erişilebilirlik",
+          "description": "Klavye, focus dönüşü, ekran okuyucu, 200% zoom ve minimum 1rem metni doğrula.",
+          "acceptance": "Ödeme eylemleri klavyeyle tamamlanır; küçük ekranlarda kontroller örtüşmez.",
+          "days": 3
+        }
+      ],
+      "evidence": "Mobil/masaüstü ödeme deneyimi ve erişilebilirlik kabul raporu.",
+      "slug": "sprint-06"
+    },
+    {
+      "id": "S07",
+      "number": 7,
+      "phase": 2,
+      "title": "Destek ve operasyon görünürlüğü",
+      "dependency": "S06",
+      "owner": "FE + BE / Destek",
+      "blocker": "Rol matrisi ve veri görüntüleme yetkileri.",
+      "stories": [
+        {
+          "id": "GP-071",
+          "title": "İşlem arama",
+          "description": "Maskeli sipariş, attempt, merchant, zaman ve durum filtreleri oluştur.",
+          "acceptance": "Tenant filtreleri sunucuda zorunlu; telefon/token arama sonucunda sızmaz.",
+          "days": 3
+        },
+        {
+          "id": "GP-072",
+          "title": "Güvenli yeniden sorgu",
+          "description": "Yetkili operatöre sadece durum yenileme; gerekçe ve audit kaydı ekle.",
+          "acceptance": "Yeniden sorgu Add veya tahsilat çağırmaz; yetkisiz rol 403 alır.",
+          "days": 4
+        },
+        {
+          "id": "GP-073",
+          "title": "Destek playbook",
+          "description": "Pending, sync_error, mükerrer şüphe ve müşteri iletişim şablonlarını yaz.",
+          "acceptance": "Destek örnek vakayı sağlayıcı referansı ve korelasyon ID ile takip edebilir.",
+          "days": 3
+        }
+      ],
+      "evidence": "Destek paneli ve G2 post-MVP kabul paketi.",
+      "slug": "sprint-07"
+    },
+    {
+      "id": "S08",
+      "number": 8,
+      "phase": 3,
+      "title": "İade ve iptal iş kuralları",
+      "dependency": "S07",
+      "owner": "BE + Finans / QA",
+      "blocker": "Q07 Refund/Void yetkisi, AccessToken anlamı, zaman pencereleri.",
+      "stories": [
+        {
+          "id": "GP-081",
+          "title": "Sözleşmeyi kapat",
+          "description": "Refund/Void için token, tutar, tam/kısmi kapsam ve nihai sonuç sorgusunu teyit et.",
+          "acceptance": "Kısmi iade desteği kanıt yoksa arayüzde yer almaz; onaylı test fixtureı mevcut.",
+          "days": 3
+        },
+        {
+          "id": "GP-082",
+          "title": "Kontrollü talep modeli",
+          "description": "İade niyeti, yetki, gerekçe ve idempotency anahtarını kaydet; onay mekanizmasını tasarla.",
+          "acceptance": "İade toplamı ödenmiş tutarı aşamaz; iki eşzamanlı talep sınırı aşamaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-083",
+          "title": "Sandbox yürütme",
+          "description": "Tam iade veya iptal için doğrulanmış adaptör ve pending sonucu uygula.",
+          "acceptance": "Timeout yeni iade oluşturmaz; finans sonucu sorgu/uzlaşma ile kesinleştirir.",
+          "days": 3
+        }
+      ],
+      "evidence": "Sağlayıcı teyitli iade/iptal akışı veya kapalı feature flag ve blokaj kaydı.",
+      "slug": "sprint-08"
+    },
+    {
+      "id": "S09",
+      "number": 9,
+      "phase": 3,
+      "title": "Günlük mutabakat",
+      "dependency": "S08",
+      "owner": "BE + Finans",
+      "blocker": "Tarih aralığı API timezone/limit ve settlement dosyası erişimi.",
+      "stories": [
+        {
+          "id": "GP-091",
+          "title": "Eşleştirme modeli",
+          "description": "Sipariş, sağlayıcı tahsilatı ve banka/settlement hareketini ayrı kaynak olarak modelle.",
+          "acceptance": "Payment success ile banka settlementı aynı şey sayılmaz; ID, tarih ve tutar izlenir.",
+          "days": 3
+        },
+        {
+          "id": "GP-092",
+          "title": "Mutabakat işi",
+          "description": "Tarih aralığı pencereleri, watermark ve geç gelen kayıtlar için yeniden tarama uygula.",
+          "acceptance": "Tekrar çalıştırma aynı farkı çoğaltmaz; limit ve saat dilimi sınır testleri geçer.",
+          "days": 4
+        },
+        {
+          "id": "GP-093",
+          "title": "Fark kuyruğu",
+          "description": "Eksik, fazla, tutar farkı ve zaman farkını sorumluya ata.",
+          "acceptance": "Seed verisindeki bütün kasıtlı farklar bulunur; kapanış gerekçesi audit kaydına girer.",
+          "days": 3
+        }
+      ],
+      "evidence": "Günlük mutabakat raporu ve fark çözüm akışı.",
+      "slug": "sprint-09"
+    },
+    {
+      "id": "S10",
+      "number": 10,
+      "phase": 3,
+      "title": "Finans raporları ve kapanış",
+      "dependency": "S09",
+      "owner": "Finans + BE + FE",
+      "blocker": "Komisyon/net tutar ve mali belge sorumluluğu teyidi.",
+      "stories": [
+        {
+          "id": "GP-101",
+          "title": "Finans raporu",
+          "description": "Brüt, net, komisyon, iade ve açık farkları kaynak referanslarıyla göster.",
+          "acceptance": "Hesaplama decimal ile yapılır; örnek dönem toplamları kaynaklarla eşleşir.",
+          "days": 3
+        },
+        {
+          "id": "GP-102",
+          "title": "Güvenli dışa aktarım",
+          "description": "Rol kapsamlı CSV, formül enjeksiyonu koruması ve export audit uygula.",
+          "acceptance": "Yetkisiz dışa aktarım engellenir; kişisel veri minimize edilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-103",
+          "title": "Kapanış kontrolü",
+          "description": "Ay kapanışı, geç kayıt düzeltmesi ve dönem kilidi politikası yaz.",
+          "acceptance": "Finans örnek dönemi kapatır; düzeltme iz bırakır ve geçmişi sessiz değiştirmez.",
+          "days": 3
+        }
+      ],
+      "evidence": "G3 finans operasyon kabulü ve örnek kapanış paketi.",
+      "slug": "sprint-10"
+    },
+    {
+      "id": "S11",
+      "number": 11,
+      "phase": 4,
+      "title": "Worker, inbox ve outbox dayanıklılığı",
+      "dependency": "S10",
+      "owner": "BE + Platform",
+      "blocker": "Ölçülen backlog ve iş hacmi.",
+      "stories": [
+        {
+          "id": "GP-111",
+          "title": "Kalıcı iş yürütme",
+          "description": "İş lease, retry sayacı ve outbox teslimini kur; mevcut DB inboxı kullan.",
+          "acceptance": "Worker işlem ortasında ölürse iş kaybolmaz; aynı yan etki iki kez oluşmaz.",
+          "days": 3
+        },
+        {
+          "id": "GP-112",
+          "title": "Zehirli mesaj yönetimi",
+          "description": "Backoff/jitter, dead-letter ve yetkili replay ekle.",
+          "acceptance": "Bozuk mesaj sağlıklı işleri durdurmaz; replay gerekçesi audit edilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-113",
+          "title": "Backpressure",
+          "description": "Sağlayıcı limitine göre concurrency ve circuit breaker uygula.",
+          "acceptance": "Sağlayıcı kesintisinde sınırsız kuyruk/istek fırtınası oluşmaz.",
+          "days": 3
+        }
+      ],
+      "evidence": "Kesinti ve worker restart kanıtı; queue age dashboardu.",
+      "slug": "sprint-11"
+    },
+    {
+      "id": "S12",
+      "number": 12,
+      "phase": 4,
+      "title": "Performans ve kapasite",
+      "dependency": "S11",
+      "owner": "Platform + BE + QA",
+      "blocker": "Hedef trafik, p95 bütçesi ve sağlayıcı sandbox yük izni.",
+      "stories": [
+        {
+          "id": "GP-121",
+          "title": "Yük modeli",
+          "description": "Ölçülen baz trafik ve 2x tepe profili; mock ve canlı limitlerini ayır.",
+          "acceptance": "Sağlayıcıya izinsiz yük gönderilmez; workload dağılımı belgeli.",
+          "days": 3
+        },
+        {
+          "id": "GP-122",
+          "title": "Profil ve iyileştirme",
+          "description": "DB index, sorgu planı, connection pool ve kontrollü token refreshi optimize et.",
+          "acceptance": "2x yükte iç API p95 ≤500 ms hedefi ölçülür; sağlayıcı/3DS süresi ayrı raporlanır.",
+          "days": 4
+        },
+        {
+          "id": "GP-123",
+          "title": "Süreklilik testi",
+          "description": "Soak, ani yükselme ve kapasite alarmı ekle.",
+          "acceptance": "Kaynak tüketimi dengelenir; hata bütçesi aşımı otomatik rollout durdurur.",
+          "days": 3
+        }
+      ],
+      "evidence": "Tekrarlanabilir yük raporu ve kapasite eşiği.",
+      "slug": "sprint-12"
+    },
+    {
+      "id": "S13",
+      "number": 13,
+      "phase": 4,
+      "title": "Felaket kurtarma ve release güvenliği",
+      "dependency": "S12",
+      "owner": "Platform + TL",
+      "blocker": "RPO/RTO işletme kararı ve yedek altyapısı.",
+      "stories": [
+        {
+          "id": "GP-131",
+          "title": "Geri yükleme",
+          "description": "Şifreli yedek, PITR varsa doğrulama, restore otomasyonu kur.",
+          "acceptance": "Hedef RPO ≤15 dk / RTO ≤60 dk test ortamında ölçülür; desteklenmeyen hedef kaydedilir.",
+          "days": 3
+        },
+        {
+          "id": "GP-132",
+          "title": "Release stratejisi",
+          "description": "Expand/contract migration, kademeli rollout ve geri dönüş prova et.",
+          "acceptance": "Eski/yeni uygulama şemayla birlikte çalışır; veri yıkıcı rollback kullanılmaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-133",
+          "title": "Kesinti tatbikatı",
+          "description": "DB/sağlayıcı/ağ kesintisi ve açık ödemeleri kurtarma akışını prova et.",
+          "acceptance": "Yeni tahsilat durdurulurken callback alımı ve mutabakat korunur.",
+          "days": 3
+        }
+      ],
+      "evidence": "G4 dayanıklılık raporu ve kurtarma süreleri.",
+      "slug": "sprint-13"
+    },
+    {
+      "id": "S14",
+      "number": 14,
+      "phase": 5,
+      "title": "Tehdit modeli ve bağımsız test",
+      "dependency": "S13",
+      "owner": "Güvenlik + BE + QA",
+      "blocker": "Test kapsamı ve yetkilendirilmiş ortam.",
+      "stories": [
+        {
+          "id": "GP-141",
+          "title": "Tehdit modelini genişlet",
+          "description": "Trust boundary, webhook replay, IDOR, XSS, SSRF ve supply chain senaryolarını işle.",
+          "acceptance": "Her kritik varlık ve saldırı yolu bir kontrol/test ile eşleşir.",
+          "days": 3
+        },
+        {
+          "id": "GP-142",
+          "title": "İleri saldırı testleri",
+          "description": "Yetki aşımı, tenant kaçışı, eşzamanlılık ve payment link sızıntısını test et.",
+          "acceptance": "Açıklar tekrar üretilebilir kanıt ve risk sahibiyle kaydedilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-143",
+          "title": "Bulguları kapat",
+          "description": "Kritik/yüksek bulguları düzelt ve yeniden test et.",
+          "acceptance": "Açık kritik/yüksek risk kalmaz; süreli istisna sürüm engelini sessiz kaldırmaz.",
+          "days": 3
+        }
+      ],
+      "evidence": "Tehdit modeli v2 ve yeniden test raporu.",
+      "slug": "sprint-14"
+    },
+    {
+      "id": "S15",
+      "number": 15,
+      "phase": 5,
+      "title": "Veri yaşam döngüsü ve gizlilik",
+      "dependency": "S14",
+      "owner": "Veri sahibi + Hukuk + BE",
+      "blocker": "Kişisel veri envanteri ve saklama gereksinimleri.",
+      "stories": [
+        {
+          "id": "GP-151",
+          "title": "Veri haritası",
+          "description": "Telefon/ad/log/callback/destek/export akışlarını amaç ve erişim rolüyle envanterle.",
+          "acceptance": "Her alanın sahibi, saklama süresi ve aktarım noktası kayıtlı.",
+          "days": 3
+        },
+        {
+          "id": "GP-152",
+          "title": "Saklama ve silme",
+          "description": "Onaylı retention, legal hold ve anonimleştirme görevlerini uygula.",
+          "acceptance": "Süre dolan örnek veri silinir; muhasebe kayıt bütünlüğü korunur.",
+          "days": 4
+        },
+        {
+          "id": "GP-153",
+          "title": "İlgili kişi süreçleri",
+          "description": "Erişim/düzeltme/silme talepleri için kimlik doğrulama ve kayıt akışı tasarla.",
+          "acceptance": "Deneme talebi uçtan uca izlenir; süreler hukuk tarafından onaylanır.",
+          "days": 3
+        }
+      ],
+      "evidence": "Veri envanteri ve doğrulanmış yaşam döngüsü kontrolleri.",
+      "slug": "sprint-15"
+    },
+    {
+      "id": "S16",
+      "number": 16,
+      "phase": 5,
+      "title": "Denetim ve yazılım tedarik zinciri",
+      "dependency": "S15",
+      "owner": "Güvenlik + Platform / TL",
+      "blocker": "Denetim kapsamı ve kanıt deposu.",
+      "stories": [
+        {
+          "id": "GP-161",
+          "title": "Audit bütünlüğü",
+          "description": "Rol, ödeme, iade, config ve export olaylarını erişimi sınırlı depoda sakla.",
+          "acceptance": "Yetkisiz silme/değişiklik testleri başarısız; hassas gövde audit içine taşınmaz.",
+          "days": 3
+        },
+        {
+          "id": "GP-162",
+          "title": "Build provenance",
+          "description": "SBOM, bağımlılık/lisans taraması ve imzalı artifact akışını kur.",
+          "acceptance": "Deploy edilen artifact commit ve CI çalışmasına kadar izlenebilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-163",
+          "title": "Kontrol kanıtları",
+          "description": "Erişim gözden geçirme, secret rotasyon ve değişiklik kanıtlarını birleştir.",
+          "acceptance": "G5 kontrol sahipleri kabul verir; sertifikasyon iddiası yapılmaz.",
+          "days": 3
+        }
+      ],
+      "evidence": "G5 yönetişim kapısı ve denetlenebilir sürüm kanıtı.",
+      "slug": "sprint-16"
+    },
+    {
+      "id": "S17",
+      "number": 17,
+      "phase": 6,
+      "title": "Contract-first entegrasyon platformu",
+      "dependency": "S16",
+      "owner": "BE + DX",
+      "blocker": "Swagger güncelleme sıklığı ve sürüm politikası.",
+      "stories": [
+        {
+          "id": "GP-171",
+          "title": "Şema değişim hattı",
+          "description": "Planlı OpenAPI snapshot, breaking diff ve sorumlu bildirimi kur.",
+          "acceptance": "Alan silme/tip değişimi CI contract gateini kırar.",
+          "days": 3
+        },
+        {
+          "id": "GP-172",
+          "title": "Adaptör sınırı",
+          "description": "Sağlayıcı DTOsunu domain modelinden ayır; hata/durum maplerini tek yerde tut.",
+          "acceptance": "Sağlayıcı şema değişikliği domain dışına yayılmaz; bilinmeyen enum incelemeye gider.",
+          "days": 4
+        },
+        {
+          "id": "GP-173",
+          "title": "Versiyon politikası",
+          "description": "İç API deprecation, migration ve tüketici testlerini ekle.",
+          "acceptance": "Örnek eski tüketici geçiş penceresinde çalışır.",
+          "days": 3
+        }
+      ],
+      "evidence": "Sürüm kontrollü sözleşme hattı ve adaptör rehberi.",
+      "slug": "sprint-17"
+    },
+    {
+      "id": "S18",
+      "number": 18,
+      "phase": 6,
+      "title": "SDK, mock ve golden path",
+      "dependency": "S17",
+      "owner": "DX + BE + QA",
+      "blocker": "Desteklenecek tüketici dilleri ve ekip ihtiyacı.",
+      "stories": [
+        {
+          "id": "GP-181",
+          "title": "İstemci paketi",
+          "description": "Onaylı iç API için tipli istemci, hata tipleri ve örnek kod üret.",
+          "acceptance": "Örnekler gerçek CI içinde derlenir; secret istemci SDKya girmez.",
+          "days": 3
+        },
+        {
+          "id": "GP-182",
+          "title": "Senaryo sunucusu",
+          "description": "Başarı, gecikme, timeout, duplicate ve kötü şema fixturelarını paketle.",
+          "acceptance": "Mock deterministiktir; gerçek API eşitliği contract testleriyle sınırlı olarak gösterilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-183",
+          "title": "Tek komut deneyimi",
+          "description": "Kurulum, seed, test ve temizleme görevlerini standartlaştır.",
+          "acceptance": "Yeni geliştirici ≤30 dk içinde ilk mock akışı tamamlar ve kanıtlar.",
+          "days": 3
+        }
+      ],
+      "evidence": "Golden path paketi ve ölçülen onboarding süresi.",
+      "slug": "sprint-18"
+    },
+    {
+      "id": "S19",
+      "number": 19,
+      "phase": 6,
+      "title": "Dokümantasyon ve geliştirici deneyimi",
+      "dependency": "S18",
+      "owner": "DX + FE / TL",
+      "blocker": "Geliştirici geri bildirimi ve arama verisi.",
+      "stories": [
+        {
+          "id": "GP-191",
+          "title": "Canlı doküman hattı",
+          "description": "API örneklerini fixturelardan üret; doküman sahipliği ve son kontrol tarihi ekle.",
+          "acceptance": "Örnek sözleşme driftinde docs CI kırılır; ölü bağlantı kalmaz.",
+          "days": 3
+        },
+        {
+          "id": "GP-192",
+          "title": "Erişilebilir portal",
+          "description": "Arama, kopyala, sürüm ve içerik gezinmesini kullanıcılarla test et.",
+          "acceptance": "Minimum 1rem, klavye ve mobil kabulü geçer; 5 görevden en az 4ü yardımsız bulunur.",
+          "days": 4
+        },
+        {
+          "id": "GP-193",
+          "title": "AI context packs",
+          "description": "Sınırlandırılmış görev istemleri, ADR ve kabul testlerini tek bağlamda sun.",
+          "acceptance": "Pilot görevde secret sızıntısı yok; diff bağımsız incelemeye elverişli.",
+          "days": 3
+        }
+      ],
+      "evidence": "G6 DX kabulü ve görev tamamlama ölçümleri.",
+      "slug": "sprint-19"
+    },
+    {
+      "id": "S20",
+      "number": 20,
+      "phase": 7,
+      "title": "Kurumsal kimlik ve erişim",
+      "dependency": "S19",
+      "owner": "BE + Güvenlik / IT",
+      "blocker": "Kurumsal IdP, rol sahibi ve lifecycle beklentileri.",
+      "stories": [
+        {
+          "id": "GP-201",
+          "title": "SSO ve MFA",
+          "description": "Onaylı OIDC/SAML yolunu seç; oturum, MFA ve acil erişim sürecini kur.",
+          "acceptance": "MFA gerektiren rol bypass edilemez; acil erişim izlenir.",
+          "days": 3
+        },
+        {
+          "id": "GP-202",
+          "title": "Görev ayrılığı",
+          "description": "İade talebi/onanması, export ve rol yönetimi yetkilerini ayır.",
+          "acceptance": "Aynı kişi kendi yüksek riskli talebini onaylayamaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-203",
+          "title": "Kullanıcı yaşam döngüsü",
+          "description": "İşten ayrılma ve erişim gözden geçirme; SCIM varsa sözleşme keşfi yap.",
+          "acceptance": "Devre dışı kullanıcının oturumu iptal edilir; erişim matrisi sahiplidir.",
+          "days": 3
+        }
+      ],
+      "evidence": "Kurumsal rol matrisi ve kimlik kabul paketi.",
+      "slug": "sprint-20"
+    },
+    {
+      "id": "S21",
+      "number": 21,
+      "phase": 7,
+      "title": "Tenant politikaları ve büyük müşteri",
+      "dependency": "S20",
+      "owner": "BE + Platform / PO",
+      "blocker": "Kurumsal müşteri hacmi ve izolasyon gereksinimleri.",
+      "stories": [
+        {
+          "id": "GP-211",
+          "title": "Politika modeli",
+          "description": "Tenant limit, özellik bayrağı ve credential sınırlarını tanımla.",
+          "acceptance": "Tenant A ayarı B işlemine etki etmez; config değişimi audit edilir.",
+          "days": 3
+        },
+        {
+          "id": "GP-212",
+          "title": "İzolasyon kanıtı",
+          "description": "Veri, kuyruk, cache ve rapor tenant anahtarlarını negatif test et.",
+          "acceptance": "Çapraz tenant erişim testlerinin tamamı reddedilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-213",
+          "title": "Taşınabilirlik ve kota",
+          "description": "Export/import sınırları, tenant offboarding ve noisy-neighbor kontrolü ekle.",
+          "acceptance": "Yoğun müşteri diğerinin SLOsunu bozmadan sınırlanır.",
+          "days": 3
+        }
+      ],
+      "evidence": "İzolasyon test raporu ve kurumsal tenant politikaları.",
+      "slug": "sprint-21"
+    },
+    {
+      "id": "S22",
+      "number": 22,
+      "phase": 7,
+      "title": "Hizmet yönetimi ve kurumsal kabul",
+      "dependency": "S21",
+      "owner": "Operasyon + PO + TL",
+      "blocker": "SLA, destek saatleri ve sağlayıcı eskalasyon anlaşması.",
+      "stories": [
+        {
+          "id": "GP-221",
+          "title": "Hizmet kataloğu",
+          "description": "Sorumlular, hizmet saatleri, önem seviyeleri ve eskalasyon yollarını tanımla.",
+          "acceptance": "P1 masa başı tatbikatında görevler ve iletişim sahibine kadar izlenir.",
+          "days": 3
+        },
+        {
+          "id": "GP-222",
+          "title": "SLO ve hata bütçesi",
+          "description": "Ölçülen veriden erişilebilirlik hedefi ve release durdurma kuralı belirle.",
+          "acceptance": "Öneri %99,9 hedef; sağlayıcı etkisi ayrı ama kullanıcı kaybı ayrıca görünür.",
+          "days": 4
+        },
+        {
+          "id": "GP-223",
+          "title": "Kurumsal teslim",
+          "description": "İş sürekliliği, sözleşme, destek ve güvenlik kanıtlarını müşteri kabulüne hazırla.",
+          "acceptance": "G7 imzalı kabul ve açık istisna listesi; sertifika vaadi yok.",
+          "days": 3
+        }
+      ],
+      "evidence": "G7 enterprise kabul paketi ve işletim sözleşmesi.",
+      "slug": "sprint-22"
+    },
+    {
+      "id": "S23",
+      "number": 23,
+      "phase": 8,
+      "title": "Olgunluk değerlendirmesi",
+      "dependency": "S22",
+      "owner": "TL + PO + Finans + Operasyon",
+      "blocker": "En az 90 günlük ölçüm verisi; yoksa gözlem penceresi beklenir.",
+      "stories": [
+        {
+          "id": "GP-231",
+          "title": "Skor kartı",
+          "description": "Güvenlik, güvenilirlik, finans, DX ve ürün alanlarında 0–3 kanıt skoru çıkar.",
+          "acceptance": "Her skor ölçüm/rapora bağlıdır; bilinmeyenler sıfır veya değerlendirilemedi olur.",
+          "days": 3
+        },
+        {
+          "id": "GP-232",
+          "title": "Akış metrikleri",
+          "description": "Lead time, deploy sıklığı, başarısız değişim ve toparlanma süresini ölç.",
+          "acceptance": "Tanım ve örneklem tutarlıdır; AI çıktı hacmi başarı metriği sayılmaz.",
+          "days": 4
+        },
+        {
+          "id": "GP-233",
+          "title": "Boşluk planı",
+          "description": "Kanıt eksiklerini risk, maliyet ve sahipleriyle sırala.",
+          "acceptance": "En yüksek riskli 5 boşluk için teslim tarihi ve kapanış testi var.",
+          "days": 3
+        }
+      ],
+      "evidence": "Maturity baseline ve öncelikli iyileştirme portföyü.",
+      "slug": "sprint-23"
+    },
+    {
+      "id": "S24",
+      "number": 24,
+      "phase": 8,
+      "title": "Kaos ve işletim tatbikatları",
+      "dependency": "S23",
+      "owner": "Platform + QA + Operasyon",
+      "blocker": "Onaylı test alanı ve durdurma koşulları.",
+      "stories": [
+        {
+          "id": "GP-241",
+          "title": "Finansal uç durumlar",
+          "description": "Geç success, çift callback, servis timeout ve worker ölümü birleşimlerini test et.",
+          "acceptance": "Tüm senaryolar sonunda sipariş, attempt ve mutabakat kayıtları açıklanabilir.",
+          "days": 3
+        },
+        {
+          "id": "GP-242",
+          "title": "İnsan süreçleri",
+          "description": "Nöbet devri, erişim kaybı ve sağlayıcı kesinti masa başı tatbikatı yap.",
+          "acceptance": "Yedek sorumlu runbook ile müdahale eder; kişi bağımlılığı ortaya çıkarılır.",
+          "days": 4
+        },
+        {
+          "id": "GP-243",
+          "title": "Bulgu düzeltme",
+          "description": "Tatbikat açıklarını kapat ve etkilenen akışı yeniden çalıştır.",
+          "acceptance": "Kritik bulgular tekrarlanamaz; gerçek süreler hedeflerle karşılaştırılır.",
+          "days": 3
+        }
+      ],
+      "evidence": "Dayanıklılık kanıtı ve düzeltilmiş runbooklar.",
+      "slug": "sprint-24"
+    },
+    {
+      "id": "S25",
+      "number": 25,
+      "phase": 8,
+      "title": "Maturity ready kabulü",
+      "dependency": "S24",
+      "owner": "Bağımsız inceleyen + PO / TL",
+      "blocker": "90 gün metrik ve G1–G7 kanıtları.",
+      "stories": [
+        {
+          "id": "GP-251",
+          "title": "Bağımsız örnekleme",
+          "description": "Ödeme, iade, release ve erişim değişikliklerini bağımsız gözle örnekle.",
+          "acceptance": "Örneklerin tamamında kim/ne/zaman/kanıt izi tamamdır.",
+          "days": 3
+        },
+        {
+          "id": "GP-252",
+          "title": "İşletim devri",
+          "description": "Servis sahibi, bütçe, nöbet, tedarikçi ve eğitim dokümanlarını devret.",
+          "acceptance": "Başka ekip örnek incident ve restore görevini yürütebilir.",
+          "days": 4
+        },
+        {
+          "id": "GP-253",
+          "title": "Olgunluk kararı",
+          "description": "G8 için 5 alanda ≥2, kritik açık 0 ve sonraki gözden geçirmeyi kaydet.",
+          "acceptance": "Maturity ready ürün içi ölçüttür; bağımsız sertifikasyon gibi sunulmaz.",
+          "days": 3
+        }
+      ],
+      "evidence": "G8 karar tutanağı ve 90 günlük yeniden değerlendirme planı.",
+      "slug": "sprint-25"
+    },
+    {
+      "id": "S26",
+      "number": 26,
+      "phase": 9,
+      "title": "Ölçüme dayalı yeni döngü",
+      "dependency": "S25",
+      "owner": "PO + TL + ilgili ekip",
+      "blocker": "Kullanıcı geri bildirimi, maliyet ve hata verisi.",
+      "stories": [
+        {
+          "id": "GP-261",
+          "title": "Hipotez seçimi",
+          "description": "Bir kullanıcı sorunu ve ölçülebilir deney seç; çoklu sağlayıcı/taksit gibi opsiyonları kanıta göre sırala.",
+          "acceptance": "Beklenen değer, kapsam dışı ve durdurma eşiği kayıtlı.",
+          "days": 3
+        },
+        {
+          "id": "GP-262",
+          "title": "Küçük dilim teslimi",
+          "description": "Feature flag ile sınırlı kullanıcı grubunda geri alınabilir değişim yayınla.",
+          "acceptance": "Finansal doğruluk ve security gate korunur; rollout ölçümü var.",
+          "days": 4
+        },
+        {
+          "id": "GP-263",
+          "title": "Öğrenme ve yeniden plan",
+          "description": "Sonuçları değerlendir; teknik borç için kapasite ayır; sonraki 2 sprinti güncelle.",
+          "acceptance": "Başarısız hipotez kapatılabilir; sonraki işler aynı DoR/DoD ile hazır.",
+          "days": 3
+        }
+      ],
+      "evidence": "Deney raporu ve güncellenmiş çeyrek planı.",
+      "slug": "sprint-26"
+    }
+  ]
+}

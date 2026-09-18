@@ -1,0 +1,98 @@
+---
+import { withBase } from '../lib/urls';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { navigation } from '../data/navigation';
+interface Props { title: string; description?: string; active?: string; }
+const { title, description = 'GalaksiPay geliştirme yol haritası ve geliştirici dokümantasyonu.', active = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content={description}/><meta name="robots" content="noindex,nofollow"/>
+    <meta name="theme-color" content="#f8f9fb"/><link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')}/>
+    <title>{title} · GalaksiPay Docs</title>
+    <script is:inline>try { if (localStorage.getItem('gp-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">İçeriğe geç</a>
+    <header class="topbar">
+      <a class="brand" href={withBase('/')} aria-label="GalaksiPay ana sayfa"><span class="brand-mark"><span></span></span><span>galaksi<span class="brand-pay">pay</span><span class="brand-docs"> / docs</span></span></a>
+      <div class="top-actions"><button class="search-open" aria-label="Dokümanlarda ara" aria-haspopup="dialog"><Icon name="search"/><span>Dokümanlarda ara</span><kbd>⌘ K</kbd></button><a class="top-api" href={withBase('/docs/api-referansi/')}>API referansı <Icon name="external" size={17}/></a><button class="icon-button" id="theme-toggle" aria-label="Renk temasını değiştir" title="Renk temasını değiştir"><Icon name="moon"/></button><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Gezinme menüsünü aç" aria-expanded="false" aria-controls="sidebar"><Icon name="menu"/></button></div>
+    </header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar" aria-label="Dokümantasyon gezinmesi">
+        <div class="workspace-label"><span class="tiny-mark">G</span><span>Entegrasyon rehberi<small>GalaksiPay × platformunuz</small></span></div>
+        <nav>
+          <a class:list={['nav-home', { active: active === 'roadmap' }]} aria-current={active==='roadmap'?'page':undefined} href={withBase('/')}><Icon name="route"/>Geliştirme yol haritası</a>
+          {navigation.map(group=><div class="nav-group"><p>{group.title}</p>{group.items.map(([slug,label])=><a href={withBase(`/docs/${slug}/`)} class:list={{active: active === slug}} aria-current={active===slug?'page':undefined}>{label}{slug==='ai-playbook'&&<span class="nav-dot"/>}</a>)}</div>)}
+        </nav>
+        <a class="sidebar-bottom" href={withBase('/downloads/galaksipay-playbook.md')} download><Icon name="download"/><span>Doküman paketini indir<small>Markdown · tüm plan</small></span></a>
+      </aside>
+      <div class="main-wrap"><main id="main"><slot/></main><footer class="footer"><span>GalaksiPay Developer Hub <span class="footer-divider">/</span> v1.0</span><span>Son inceleme · 18 Eylül 2026</span></footer></div>
+    </div>
+    <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-header"><Icon name="search"/><label class="sr-only" id="search-title" for="search-input">Dokümanlarda ara</label><input id="search-input" type="search" placeholder="Callback, MVP, idempotency…" autocomplete="off"/><button id="search-close" class="close-button" aria-label="Aramayı kapat">Esc</button></div><p id="search-status" role="status">Bir konu veya sprint numarası yazın.</p><div id="search-results"></div><div class="search-footer">Gezinmek için Tab · Açmak için Enter</div></dialog>
+    <script>
+      const menu = document.querySelector<HTMLButtonElement>('#menu-toggle');
+      menu?.addEventListener('click', () => {
+        const open = menu.getAttribute('aria-expanded') !== 'true';
+        menu.setAttribute('aria-expanded', String(open));
+        document.querySelector('#sidebar')?.classList.toggle('is-open', open);
+      });
+      document.querySelector('#theme-toggle')?.addEventListener('click', () => {
+        const dark = document.documentElement.dataset.theme !== 'dark';
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        try { localStorage.setItem('gp-theme', dark ? 'dark' : 'light'); } catch {}
+      });
+      const dialog = document.querySelector<HTMLDialogElement>('#search-dialog')!;
+      const input = document.querySelector<HTMLInputElement>('#search-input')!;
+      const status = document.querySelector('#search-status')!;
+      const results = document.querySelector('#search-results')!;
+      let index: {title:string;description:string;body:string;url:string;group:string}[] = [];
+      let loading: Promise<void> | undefined;
+      const normalize = (value:string) => value.toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i');
+      function render() {
+        results.replaceChildren();
+        const terms = normalize(input.value.trim()).split(/\s+/).filter(Boolean);
+        if (!terms.length) { status.textContent = 'Bir konu veya sprint numarası yazın.'; return; }
+        const matches = index.filter(d => terms.every(t => normalize(`${d.title} ${d.description} ${d.body}`).includes(t))).sort((a,b)=>Number(terms.every(t=>normalize(b.title).includes(t)))-Number(terms.every(t=>normalize(a.title).includes(t))));
+        status.textContent = matches.length ? `${matches.length} sonuç · ilk ${Math.min(12,matches.length)} gösteriliyor` : 'Sonuç bulunamadı. Başka bir konu veya S01 gibi bir sprint numarası deneyin.';
+        for (const item of matches.slice(0,12)) {
+          const a=document.createElement('a'); a.href=item.url; a.className='search-result';
+          const group=document.createElement('span');group.textContent=item.group;
+          const title=document.createElement('strong');title.textContent=item.title;
+          const desc=document.createElement('p');desc.textContent=item.description;
+          a.append(group,title,desc);results.append(a);
+        }
+      }
+      async function openSearch() {
+        if (!dialog.open) dialog.showModal();
+        input.focus();
+        if (!index.length) {
+          status.textContent='Arama hazırlanıyor…';
+          loading ||= fetch(import.meta.env.BASE_URL.replace(/\/$/, '') + '/search.json').then(r=>{if(!r.ok) throw new Error(); return r.json();}).then(data=>{index=data;});
+          try { await loading; } catch { loading=undefined;status.textContent='Arama yüklenemedi. Sayfayı yenileyin veya yan menüyü kullanın.';return; }
+        }
+        render();
+      }
+      document.querySelectorAll('.search-open').forEach(button=>button.addEventListener('click',openSearch));
+      document.querySelector('#search-close')?.addEventListener('click',()=>dialog.close());
+      dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+      input.addEventListener('input',render);
+      document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch();}});
+      document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre=>{
+        const button=document.createElement('button');button.className='copy-code';button.type='button';button.textContent='Kopyala';button.setAttribute('aria-label','Kod bloğunu kopyala');
+        button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(pre.querySelector('code')?.textContent || '');button.textContent='Kopyalandı';}catch{button.textContent='Metni seçip kopyalayın';}setTimeout(()=>button.textContent='Kopyala',2200);});
+        pre.append(button);
+      });
+      document.querySelectorAll<HTMLInputElement>('.prose .task-list-item input').forEach((checkbox,i)=>{
+        checkbox.disabled=false;
+        checkbox.setAttribute('aria-label',checkbox.closest('li')?.textContent?.trim() || `Kontrol ${i+1}`);
+        const key=`gp-check:${location.pathname}:${i}`;
+        try{checkbox.checked=localStorage.getItem(key)==='true';}catch{}
+        checkbox.addEventListener('change',()=>{try{localStorage.setItem(key,String(checkbox.checked));}catch{}});
+      });
+    </script>
+  </body>
+</html>

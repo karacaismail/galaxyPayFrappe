@@ -1,0 +1,25 @@
+---
+import { withBase } from '../../lib/urls';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import roadmap from '../../data/roadmap.json';
+export async function getStaticPaths() { return (await getCollection('docs')).map(doc=>({params:{slug:doc.id},props:{doc}})); }
+const {doc}=Astro.props;
+const {Content,headings}=await render(doc);
+const sprint=roadmap.sprints.find(s=>s.slug===doc.id);
+---
+<Layout title={doc.data.title} description={doc.data.description} active={doc.id}>
+  <div class="breadcrumb"><a href={withBase('/')}>Dokümantasyon</a><Icon name="chevron" size={16}/><span>{doc.data.group}</span></div>
+  <div class="document-grid">
+    <article class="document">
+      <div class="eyebrow"><span class="accent-line"></span>{sprint?`FAZ ${sprint.phase} / SPRINT ${sprint.id}`:doc.data.group.toLocaleUpperCase('tr')}</div>
+      <h1>{doc.data.title}</h1><p class="doc-description">{doc.data.description}</p>
+      <div class="doc-meta"><span><Icon name="clock" size={17}/>18 Eylül 2026</span><span>{sprint?'Planlandı · 2 hafta':'v1.0 · Geliştirme rehberi'}</span></div>
+      {sprint&&<a class="sprint-back" href={withBase(`/#faz-${sprint.phase}`)}><Icon name="route"/>Yol haritasında göster<Icon name="arrow"/></a>}
+      <div class="prose"><Content/></div>
+      <div class="doc-end"><span>Bir sonraki adım</span><a href={withBase(sprint&&sprint.number<26?`/docs/sprint-${String(sprint.number+1).padStart(2,'0')}/`:'/docs/sprint-01/')}>{sprint&&sprint.number<26?'Sonraki sprinti incele':'Sprint 01 ile başla'}<Icon name="arrow"/></a></div>
+    </article>
+    <aside class="toc" aria-label="Bu sayfada"><p>Bu sayfada</p>{headings.filter(h=>h.depth===2).map(h=><a href={`#${h.slug}`}>{h.text}</a>)}<div class="toc-note"><Icon name="shield"/><strong>Kanıtla ilerle.</strong><p>Plan, uygulama ve doğrulanmış sonuç birbirinden ayrı tutulur.</p><a href={withBase('/docs/kaynaklar/')}>Kaynakları gör <span>↗</span></a></div></aside>
+  </div>
+</Layout>

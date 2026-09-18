@@ -1,0 +1,4 @@
+.DS_Store
+# Private provider sample and test fixtures; never publish them with the docs.
+GalaksipayDemo/
+GalaksiPay_Test_Kartları.txt

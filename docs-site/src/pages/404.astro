@@ -1,0 +1,5 @@
+---
+import { withBase } from '../lib/urls';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Sayfa bulunamadı"><div class="eyebrow">404 / SAYFA BULUNAMADI</div><h1>Bu rota henüz yok.</h1><p>Yol haritasından devam edin veya üstteki aramayla ilgili dokümanı bulun.</p><a class="button primary" href={withBase('/')}>Yol haritasına dön →</a></Layout>

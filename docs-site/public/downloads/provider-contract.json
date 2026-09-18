@@ -1,0 +1,1677 @@
+{
+  "kind": "Selected provider contract excerpt; not a complete OpenAPI document",
+  "retrievedAt": "2026-09-18",
+  "source": "https://testapi.galaksipay.com/galaksipay/swagger/v1/swagger.json",
+  "sha256": "fe82c9c550b67eb40d3463f34663c9519e292260125c1d8a301f7d37b4d20d1f",
+  "paths": {
+    "/api/Authentication/Authenticate": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Checks if the user with the specified logon parameters exists in the database. If it does, authenticates this user.",
+        "description": "Refer to the following help topic for more information on authentication methods in the XAF Security System: <a href='https://docs.devexpress.com/eXpressAppFramework/119064/data-security-and-safety/security-system/authentication'>Authentication</a>.",
+        "operationId": "POST_api/Authentication/Authenticate",
+        "requestBody": {
+          "description": "For example: <br /> { \"userName\": \"Admin\", \"password\": \"\" }",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationStandardLogonParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MasterpassV2/Void": {
+      "post": {
+        "tags": [
+          "MasterpassV2"
+        ],
+        "operationId": "POST_api/MasterpassV2/Void",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MasterpassV2/Refund": {
+      "post": {
+        "tags": [
+          "MasterpassV2"
+        ],
+        "operationId": "POST_api/MasterpassV2/Refund",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Merchant/GetSubMerchants": {
+      "get": {
+        "tags": [
+          "Merchant"
+        ],
+        "operationId": "GET_api/Merchant/GetSubMerchants",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubMerchantDtoListApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/Add": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "POST_api/Transaction/Add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionAddRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/Complete": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "POST_api/Transaction/Complete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionCompleteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/GetAll": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/GetAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoListApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/Get/Get": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/Get/Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "transactionNo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/GetById/{id}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/GetById/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/GetByTransactionNo/{transactionNo}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/GetByTransactionNo/{transactionNo}",
+        "parameters": [
+          {
+            "name": "transactionNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/GetDebtByTransactionNo/{transactionNo}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/GetDebtByTransactionNo/{transactionNo}",
+        "parameters": [
+          {
+            "name": "transactionNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/GetTransactionsByDateRange/{startDate}/{endDate}": {
+      "get": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "GET_api/Transaction/GetTransactionsByDateRange/{startDate}/{endDate}",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoListApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Transaction/ApplyInstallment": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "POST_api/Transaction/ApplyInstallment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionApplyInstallmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDtoApiResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "schemas": {
+    "AuthenticationStandardLogonParameters": {
+      "type": "object",
+      "properties": {
+        "UserName": {
+          "type": "string",
+          "nullable": true
+        },
+        "Password": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "BankDto": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "Name": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "string",
+          "nullable": true
+        },
+        "Ica": {
+          "type": "string",
+          "nullable": true
+        },
+        "Description": {
+          "type": "string",
+          "nullable": true
+        },
+        "IsActive": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BankDtoApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/BankDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BankDtoListApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/BankDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "DateTimeApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ExportTarget": {
+      "enum": [
+        "Xls",
+        "Xlsx",
+        "Html",
+        "Mht",
+        "Pdf",
+        "Text",
+        "Rtf",
+        "Csv",
+        "Image",
+        "Docx"
+      ],
+      "type": "string"
+    },
+    "InstallmentOptionApiDto": {
+      "type": "object",
+      "properties": {
+        "Count": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "Label": {
+          "type": "string",
+          "nullable": true
+        },
+        "CommissionRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "BaseAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "InstallmentAmount": {
+          "type": "number",
+          "format": "double",
+          "nullable": true
+        },
+        "BankCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "BankName": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "InstallmentOptionsApiResponse": {
+      "type": "object",
+      "properties": {
+        "BankCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "BankName": {
+          "type": "string",
+          "nullable": true
+        },
+        "Bin": {
+          "type": "string",
+          "nullable": true
+        },
+        "Installments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InstallmentOptionApiDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "InstallmentOptionsApiResponseApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/InstallmentOptionsApiResponse"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MasterpassSettingDto": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "Description": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassMerchantId": {
+          "type": "integer",
+          "format": "int64",
+          "nullable": true
+        },
+        "TerminalGroupId": {
+          "type": "string",
+          "nullable": true
+        },
+        "IsActive": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MasterpassSettingDtoApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/MasterpassSettingDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MasterpassV2TransactionDirectPaymentCompleteRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId",
+        "PaymentToken"
+      ],
+      "type": "object",
+      "properties": {
+        "PaymentToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "UserId": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "string",
+          "nullable": true
+        },
+        "OrderId": {
+          "type": "string",
+          "nullable": true
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MasterpassV2TransactionPaymentCompleteRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId",
+        "PaymentToken"
+      ],
+      "type": "object",
+      "properties": {
+        "PaymentToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "UserId": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "string",
+          "nullable": true
+        },
+        "OrderId": {
+          "type": "string",
+          "nullable": true
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MasterpassV2TransactionRegisterAndPurchaseCompleteRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId",
+        "PaymentToken"
+      ],
+      "type": "object",
+      "properties": {
+        "PaymentToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "UserId": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "string",
+          "nullable": true
+        },
+        "OrderId": {
+          "type": "string",
+          "nullable": true
+        },
+        "AcquirerIcaNumber": {
+          "type": "string",
+          "nullable": true
+        },
+        "RequestReferenceNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "InstallmentCount": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ObjectApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "PaymentOrderRequest": {
+      "required": [
+        "GalaksipayTransactionId"
+      ],
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "string",
+          "nullable": true
+        },
+        "CardAlias": {
+          "type": "string",
+          "nullable": true
+        },
+        "MerchantUserId": {
+          "type": "string",
+          "nullable": true
+        },
+        "OrderId": {
+          "type": "string",
+          "nullable": true
+        },
+        "ProductId": {
+          "type": "string",
+          "nullable": true
+        },
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "QueryRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId"
+      ],
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RefundRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId"
+      ],
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendEmailNotificationRequest": {
+      "type": "object",
+      "properties": {
+        "Email": {
+          "type": "string",
+          "nullable": true
+        },
+        "TransactionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "Subject": {
+          "type": "string",
+          "nullable": true
+        },
+        "Body": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendEmailNotificationResponse": {
+      "type": "object",
+      "properties": {
+        "Sent": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendEmailNotificationResponseApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/SendEmailNotificationResponse"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendSmsNotificationRequest": {
+      "type": "object",
+      "properties": {
+        "PhoneNumber": {
+          "type": "string",
+          "nullable": true
+        },
+        "TransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendSmsNotificationResponse": {
+      "type": "object",
+      "properties": {
+        "SmsTraceId": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "SendSmsNotificationResponseApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/SendSmsNotificationResponse"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SubMerchantDto": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "Name": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "string",
+          "nullable": true
+        },
+        "Description": {
+          "type": "string",
+          "nullable": true
+        },
+        "IsActive": {
+          "type": "boolean"
+        },
+        "HasMasterpassSetting": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SubMerchantDtoListApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SubMerchantDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TokenGenerateRequest": {
+      "required": [
+        "Secure3dType"
+      ],
+      "type": "object",
+      "properties": {
+        "AccountKey": {
+          "type": "string",
+          "nullable": true
+        },
+        "Secure3dType": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "UserId": {
+          "type": "string",
+          "nullable": true
+        },
+        "IsMsisdnValidated": {
+          "type": "string",
+          "nullable": true
+        },
+        "AuthenticationMethod": {
+          "type": "string",
+          "nullable": true
+        },
+        "BankIca": {
+          "type": "string",
+          "nullable": true
+        },
+        "IssuerIca": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "OrderNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "string",
+          "nullable": true
+        },
+        "CreditType": {
+          "type": "string",
+          "nullable": true
+        },
+        "CampaingCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "CurrencyCode": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "TransactionToken": {
+          "type": "string",
+          "nullable": true
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TokenGenerateResponse": {
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "type": "string",
+          "nullable": true
+        },
+        "Token": {
+          "type": "string",
+          "nullable": true
+        },
+        "ExpiresIn": {
+          "type": "integer",
+          "format": "int64",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TokenGenerateResponseApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/TokenGenerateResponse"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionAddRequest": {
+      "required": [
+        "CustomerFirstName",
+        "CustomerLastName",
+        "CustomerPhone"
+      ],
+      "type": "object",
+      "properties": {
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "OrderNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "CustomerFirstName": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "CustomerLastName": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "CustomerPhone": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "SubMerchantId": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true
+        },
+        "CallbackUrl": {
+          "type": "string",
+          "nullable": true
+        },
+        "TransactionDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TransactionDetailDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionApplyInstallmentRequest": {
+      "type": "object",
+      "properties": {
+        "TransactionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "InstallmentCount": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "Bin": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionCompleteRequest": {
+      "type": "object",
+      "properties": {
+        "TransactionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "IsSuccessful": {
+          "type": "boolean"
+        },
+        "RrnNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "SlipNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "SmsTraceId": {
+          "type": "string",
+          "nullable": true
+        },
+        "MpOrderNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseRawJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassErrorMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "Description": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionDetailDto": {
+      "type": "object",
+      "properties": {
+        "Key": {
+          "type": "string",
+          "nullable": true
+        },
+        "Value": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionDto": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "TransactionNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "TransactionDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "MerchantId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "MerchantName": {
+          "type": "string",
+          "nullable": true
+        },
+        "ApplicationUserId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "ApplicationUserName": {
+          "type": "string",
+          "nullable": true
+        },
+        "IsPaid": {
+          "type": "boolean"
+        },
+        "TransactionStatusId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "TransactionStatusName": {
+          "type": "string",
+          "nullable": true
+        },
+        "OrderNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "MpOrderNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "Amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "NetAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "InstallmentCount": {
+          "type": "integer",
+          "format": "int32",
+          "nullable": true
+        },
+        "CommissionRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "CustomerFirstName": {
+          "type": "string",
+          "nullable": true
+        },
+        "CustomerLastName": {
+          "type": "string",
+          "nullable": true
+        },
+        "CustomerPhone": {
+          "type": "string",
+          "nullable": true
+        },
+        "StartDate": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "CompleteDate": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "PaymentDate": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "CanceledDate": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "CancelType": {
+          "type": "string",
+          "nullable": true
+        },
+        "CancelMasterpassResponseCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "CancelMasterpassResponseMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "CancelMasterpassResponseRawJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "CancelMasterpassErrorMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "GalaksipayPaymentToken": {
+          "type": "string",
+          "nullable": true
+        },
+        "GalaksipayPaymentTokenVoid": {
+          "type": "string",
+          "nullable": true
+        },
+        "Description": {
+          "type": "string",
+          "nullable": true
+        },
+        "RrnNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "SlipNo": {
+          "type": "string",
+          "nullable": true
+        },
+        "SmsTraceId": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassResponseRawJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "MasterpassErrorMessage": {
+          "type": "string",
+          "nullable": true
+        },
+        "SubMerchantId": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true
+        },
+        "SubMerchantName": {
+          "type": "string",
+          "nullable": true
+        },
+        "EffectiveMerchantId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "EffectiveMerchantName": {
+          "type": "string",
+          "nullable": true
+        },
+        "PaymentUrl": {
+          "type": "string",
+          "nullable": true
+        },
+        "TransactionDetailDtos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TransactionDetailDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionDtoApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "$ref": "#/components/schemas/TransactionDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransactionDtoListApiResult": {
+      "type": "object",
+      "properties": {
+        "IsSuccess": {
+          "type": "boolean"
+        },
+        "Message": {
+          "type": "string",
+          "nullable": true
+        },
+        "MessageJson": {
+          "type": "string",
+          "nullable": true
+        },
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "StackTrace": {
+          "type": "string",
+          "nullable": true
+        },
+        "Data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TransactionDto"
+          },
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "UnlinkRequest": {
+      "required": [
+        "AccessToken",
+        "AccountKey"
+      ],
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "AccountKey": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "UserId": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "VoidRequest": {
+      "required": [
+        "AccessToken",
+        "GalaksipayTransactionId"
+      ],
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "GalaksipayTransactionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
